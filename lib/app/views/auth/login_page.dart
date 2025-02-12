@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:constriturar/app/views/modules/home/home_page.dart';
 import 'package:constriturar/app/core/services/secure_storage_service.dart';
 import 'package:constriturar/app/core/components/components.dart';
 import 'package:constriturar/app/core/config/app_colors.dart';
@@ -32,7 +33,7 @@ class LoginPageState extends State<LoginPage> {
 
     if (accessToken != null && refreshToken != null) {
       if (!mounted) return;
-      Navigator.pushReplacementNamed(context, AppRoutes.mainPages);
+      AppRoutes.setView(const HomePage(), context);
     }
   }
 
@@ -61,7 +62,7 @@ class LoginPageState extends State<LoginPage> {
       _showSnackBar(response['error']);
     } else {
       _showSnackBar('Inicio de sesión exitoso');
-      Navigator.pushReplacementNamed(context, AppRoutes.mainPages);
+      AppRoutes.setView(const HomePage(), context);
     }
   }
 

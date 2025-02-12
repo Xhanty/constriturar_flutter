@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:constriturar/app/views/modules/configuration/materials/materials_page.dart';
+import 'package:constriturar/app/views/modules/home/home_page.dart';
 import 'package:constriturar/app/core/services/auth_service.dart';
 import 'package:constriturar/app/routes/routes.dart';
 import 'package:constriturar/app/core/config/app_colors.dart';
 
 class SideMenu extends StatefulWidget {
-  const SideMenu({super.key});
+  const SideMenu({super.key, required this.view});
+
+  final Widget view;
 
   @override
   State<SideMenu> createState() => SideMenuState();
@@ -27,7 +31,7 @@ class SideMenuState extends State<SideMenu> {
             Padding(
               padding: const EdgeInsets.only(left: 24, top: 5, bottom: 5),
             ),
-            SideMenuOptions(authService: _authService)
+            SideMenuOptions(authService: _authService, view: widget.view),
           ],
         ),
       ),
@@ -35,62 +39,70 @@ class SideMenuState extends State<SideMenu> {
   }
 }
 
-class SideMenuOptions extends StatelessWidget {
+class SideMenuOptions extends StatefulWidget {
   const SideMenuOptions({
     super.key,
     required this.authService,
+    required this.view,
   });
 
   final AuthService authService;
+  final Widget view;
+
+  @override
+  State<SideMenuOptions> createState() => _SideMenuOptionsState();
+}
+
+class _SideMenuOptionsState extends State<SideMenuOptions> {
   final List<Map<String, dynamic>> menuItems = const [
     {
       'icon': Icons.home,
       'title': 'Inicio',
-      'route': AppRoutes.mainPages,
       'label': 'Dashboard',
-      'isVisible': true
+      'isVisible': true,
+      'view': HomePage(),
     },
     {
       'icon': Icons.people,
       'title': 'Clientes',
-      'route': AppRoutes.mainPages,
       'label': 'Clients',
-      'isVisible': true
+      'isVisible': true,
+      'view': HomePage(),
     },
     {
       'icon': Icons.cabin,
       'title': 'Materiales',
-      'route': AppRoutes.mainPages,
       'label': 'Materials',
-      'isVisible': true
+      'isVisible': true,
+      'view': MaterialsPage(),
     },
     {
       'icon': Icons.construction,
       'title': 'Obras',
-      'route': AppRoutes.mainPages,
       'label': 'Projects',
-      'isVisible': true
+      'isVisible': true,
+      'view': HomePage(),
     },
     {
       'icon': Icons.person_search,
       'title': 'Usuarios',
-      'route': AppRoutes.mainPages,
       'label': 'Users',
-      'isVisible': true
+      'isVisible': true,
+      'view': HomePage(),
     },
     {
       'icon': Icons.straighten,
       'title': 'Unidades',
-      'route': AppRoutes.mainPages,
       'label': 'Units',
-      'isVisible': true
+      'isVisible': true,
+      'view': HomePage(),
     },
     {
       'icon': Icons.directions_car,
       'title': 'Vehículos',
-      'route': AppRoutes.mainPages,
       'label': 'Vehicles',
-      'isVisible': true
+      'isVisible': true,
+      'view': HomePage(),
     },
   ];
 
@@ -99,18 +111,32 @@ class SideMenuOptions extends StatelessWidget {
     return Column(
       children: [
         ...menuItems.where((item) => item['isVisible']).map((item) {
-          return ListTile(
-            onTap: () {
-              Navigator.pushReplacementNamed(context, item['route']);
-            },
-            leading: SizedBox(
-              height: 34,
-              width: 34,
-              child: Icon(item['icon'], color: AppColors.lightPrimary),
+          return Container(
+            decoration: BoxDecoration(
+              color: widget.view == item['view']
+                  ? AppColors.lightPrimary
+                  : AppColors.primary,
+              borderRadius: BorderRadius.circular(8),
             ),
-            title: Text(
-              item['title'],
-              style: TextStyle(color: AppColors.lightPrimary),
+            child: ListTile(
+              onTap: () {
+                AppRoutes.setView(item['view'], context);
+              },
+              leading: SizedBox(
+                height: 34,
+                width: 34,
+                child: Icon(item['icon'],
+                    color: widget.view == item['view']
+                        ? AppColors.primary
+                        : AppColors.lightPrimary),
+              ),
+              title: Text(
+                item['title'],
+                style: TextStyle(
+                    color: widget.view == item['view']
+                        ? AppColors.primary
+                        : AppColors.lightPrimary),
+              ),
             ),
           );
         }),
@@ -124,7 +150,7 @@ class SideMenuOptions extends StatelessWidget {
         ListTile(
           onTap: () {
             // Eliminar los tokens del almacenamiento seguro
-            authService.logout();
+            widget.authService.logout();
             Navigator.pushReplacementNamed(context, AppRoutes.login);
           },
           leading: SizedBox(

@@ -55,7 +55,7 @@ class _AppLayoutState extends State<AppLayout>
               width: 288,
               left: isSideMenuClosed ? -288 : 0,
               height: MediaQuery.of(context).size.height,
-              child: SideMenu(),
+              child: SideMenu(view: widget.child),
             ),
             PageContainer(
                 animation: animation,

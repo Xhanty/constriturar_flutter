@@ -4,14 +4,20 @@ import 'package:constriturar/app/core/config/app_colors.dart';
 class CardSimple extends StatefulWidget {
   const CardSimple({
     super.key,
+    required this.id,
     required this.title,
     this.description,
     required this.icon,
+    required this.onEdit,
+    required this.onDelete,
   });
 
+  final int id;
   final String title;
   final String? description;
   final IconData icon;
+  final Function onEdit;
+  final Function onDelete;
 
   @override
   State<CardSimple> createState() => _CardSimpleState();
@@ -71,11 +77,15 @@ class _CardSimpleState extends State<CardSimple> {
             children: [
               IconButton(
                 icon: Icon(Icons.edit, color: AppColors.primary),
-                onPressed: () {},
+                onPressed: () {
+                  widget.onEdit(widget.id);
+                },
               ),
               IconButton(
                 icon: Icon(Icons.delete, color: AppColors.primary),
-                onPressed: () {},
+                onPressed: () {
+                  widget.onDelete(widget.id);
+                },
               ),
             ],
           )

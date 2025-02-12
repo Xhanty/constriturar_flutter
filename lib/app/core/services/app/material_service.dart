@@ -1,83 +1,49 @@
 import 'dart:convert';
-import 'package:constriturar/app/core/config/environment_config.dart';
+import 'package:constriturar/app/core/services/request_service.dart';
 import 'package:constriturar/app/core/models/material_model.dart';
-import 'package:constriturar/app/core/services/secure_storage_service.dart';
-import 'package:http/http.dart' as http;
 
 class MaterialService {
-  final String _baseUrl = EnvironmentConfig.apiUrl;
-  final SecureStorageService _secureStorageService = SecureStorageService();
+  final RequestService _requestService = RequestService();
 
   // Método para obtener todos los materiales
-  Future<List<MaterialModel>> fetchMaterials() async {
-    final response = await http.get(
-      Uri.parse('$_baseUrl/materiales'),
-      headers: {
-        'Authorization':
-            'Bearer ${await _secureStorageService.getAccessToken()}',
-        'Content-Type': 'application/json'
-      },
-    );
+  Future<List<MaterialModel>> getAll() async {
+    final url = '/materiales';
+    final response = await _requestService.get(url);
 
-    if (response.statusCode == 200) {
-      final List<dynamic> data = json.decode(response.body);
-      return data.map((e) => MaterialModel.fromJson(e)).toList();
-    } else {
-      throw Exception('Error al obtener los materiales');
+    if (response != null && response.statusCode == 200) {
+      final List<dynamic> responseData = jsonDecode(response.body);
+      return responseData.map((data) => MaterialModel.fromJson(data)).toList();
     }
+
+    return [];
   }
 
   // Método para obtener un material por su ID
-  Future<MaterialModel> fetchMaterialById(MaterialModel material) async {
-    final response = await http.get(
-      Uri.parse(
-          '$_baseUrl/materiales/get-material-by-id/${material.materialId}'),
-      headers: {
-        'Authorization':
-            'Bearer ${await _secureStorageService.getAccessToken()}',
-        'Content-Type': 'application/json'
-      },
-    );
+  Future<MaterialModel?> getById(MaterialModel material) async {
+    final url = '/materiales/get-material-by-id/${material.materialId}';
+    final response = await _requestService.get(url);
 
-    if (response.statusCode == 200) {
-      final Map<String, dynamic> data = json.decode(response.body);
-      return MaterialModel.fromJson(data);
-    } else {
-      throw Exception('Error al obtener el material');
+    if (response != null && response.statusCode == 200) {
+      final responseData = jsonDecode(response.body);
+      return MaterialModel.fromJson(responseData);
     }
+
+    return null;
   }
 
   // Método para crear un material
-  Future<void> createMaterial(MaterialModel material) async {
-    final response = await http.post(
-      Uri.parse('$_baseUrl/materiales'),
-      headers: {
-        'Authorization':
-            'Bearer ${await _secureStorageService.getAccessToken()}',
-        'Content-Type': 'application/json'
-      },
-      body: jsonEncode(material.toJson()),
-    );
+  Future<bool> create(MaterialModel material) async {
+    final url = '/materiales';
+    final response = await _requestService.post(url, material.toJson());
 
-    if (response.statusCode != 201) {
-      throw Exception('Error al crear el material');
-    }
+    return response != null && response.statusCode == 201;
   }
 
   // Método para actualizar un material
-  Future<void> updateMaterial(MaterialModel material) async {
-    final response = await http.put(
-      Uri.parse('$_baseUrl/materiales/${material.materialId}'),
-      headers: {
-        'Authorization':
-            'Bearer ${await _secureStorageService.getAccessToken()}',
-        'Content-Type': 'application/json'
-      },
-      body: jsonEncode(material.toJson()),
-    );
+  Future<bool> update(MaterialModel material) async {
+    final url = '/materiales/${material.materialId}';
+    final response = await _requestService.put(url, material.toJson());
 
-    if (response.statusCode != 200) {
-      throw Exception('Error al actualizar el material');
-    }
+    return response != null && response.statusCode == 200;
   }
 }

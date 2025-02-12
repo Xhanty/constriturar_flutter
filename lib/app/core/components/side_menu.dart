@@ -1,6 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:constriturar/app/core/services/auth_service.dart';
 import 'package:constriturar/app/routes/routes.dart';
-import 'package:flutter/material.dart';
 import 'package:constriturar/app/core/config/app_colors.dart';
 
 class SideMenu extends StatefulWidget {
@@ -46,49 +46,49 @@ class SideMenuOptions extends StatelessWidget {
     {
       'icon': Icons.home,
       'title': 'Inicio',
-      'route': '/home',
+      'route': AppRoutes.mainPages,
       'label': 'Dashboard',
       'isVisible': true
     },
     {
       'icon': Icons.people,
       'title': 'Clientes',
-      'route': '/home',
+      'route': AppRoutes.mainPages,
       'label': 'Clients',
       'isVisible': true
     },
     {
       'icon': Icons.cabin,
       'title': 'Materiales',
-      'route': '/home',
+      'route': AppRoutes.mainPages,
       'label': 'Materials',
       'isVisible': true
     },
     {
       'icon': Icons.construction,
       'title': 'Obras',
-      'route': '/home',
+      'route': AppRoutes.mainPages,
       'label': 'Projects',
       'isVisible': true
     },
     {
       'icon': Icons.person_search,
       'title': 'Usuarios',
-      'route': '/home',
+      'route': AppRoutes.mainPages,
       'label': 'Users',
       'isVisible': true
     },
     {
       'icon': Icons.straighten,
       'title': 'Unidades',
-      'route': '/home',
+      'route': AppRoutes.mainPages,
       'label': 'Units',
       'isVisible': true
     },
     {
       'icon': Icons.directions_car,
       'title': 'Vehículos',
-      'route': '/home',
+      'route': AppRoutes.mainPages,
       'label': 'Vehicles',
       'isVisible': true
     },
@@ -101,7 +101,7 @@ class SideMenuOptions extends StatelessWidget {
         ...menuItems.where((item) => item['isVisible']).map((item) {
           return ListTile(
             onTap: () {
-              Navigator.pushNamed(context, item['route']);
+              Navigator.pushReplacementNamed(context, item['route']);
             },
             leading: SizedBox(
               height: 34,

@@ -68,6 +68,12 @@ flutter run --dart-define=ENV=prod
 
 ---
 
+## ** Versiones **
+- Flutter 3.27.4
+- Tools • Dart 3.6.2 • DevTools 2.40.3
+
+---
+
 ## **Recomendaciones**
 - Mantén el archivo `pubspec.yaml` actualizado con cualquier nuevo asset.
 - No incluyas archivos sensibles en los archivos de configuración por ambiente.

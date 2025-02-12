@@ -41,40 +41,6 @@ class AuthService {
     }
   }
 
-  // Método para refrescar el token de acceso
-  Future<Map<String, dynamic>> refreshToken() async {
-    final url = Uri.parse('$_baseUrl/auth/authentication/refresh-token');
-    final accessToken = await _secureStorageService.getAccessToken();
-    final refreshToken = await _secureStorageService.getRefreshToken();
-
-    try {
-      final response = await http.post(
-        url,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: jsonEncode({
-          'accessToken': accessToken,
-          'refreshToken': refreshToken,
-        }),
-      );
-
-      if (response.statusCode == 200) {
-        final responseData = jsonDecode(response.body);
-        // Guardar el nuevo token de acceso
-        await _secureStorageService.saveTokens(
-          responseData['accessToken'],
-          responseData['refreshToken'],
-        );
-        return {'success': true};
-      } else {
-        return {'error': 'Error al refrescar el token'};
-      }
-    } catch (e) {
-      return {'error': 'Error al conectar con el servidor'};
-    }
-  }
-
   // Método para cerrar sesión
   Future<void> logout() async {
     await _secureStorageService.clearTokens();

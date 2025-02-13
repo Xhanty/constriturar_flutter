@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:constriturar/app/views/modules/configuration/units/units_page.dart';
 import 'package:constriturar/app/views/modules/configuration/materials/materials_page.dart';
 import 'package:constriturar/app/views/modules/home/home_page.dart';
 import 'package:constriturar/app/core/services/auth_service.dart';
@@ -95,7 +96,7 @@ class _SideMenuOptionsState extends State<SideMenuOptions> {
       'title': 'Unidades',
       'label': 'Units',
       'isVisible': true,
-      'view': HomePage(),
+      'view': UnitsPage(),
     },
     {
       'icon': Icons.directions_car,

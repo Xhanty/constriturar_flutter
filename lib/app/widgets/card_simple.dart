@@ -63,11 +63,20 @@ class _CardSimpleState extends State<CardSimple> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(widget.title, style: TextStyle(fontSize: 16)),
-                    widget.description != null
-                        ? Text(widget.description!,
-                            style: TextStyle(fontSize: 13))
-                        : Container(),
+                  Text(
+                    widget.title.length > 20
+                      ? '${widget.title.substring(0, 20)}...'
+                      : widget.title,
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  widget.description != null
+                    ? Text(
+                      widget.description!.length > 25
+                        ? '${widget.description!.substring(0, 25)}...'
+                        : widget.description!,
+                      style: TextStyle(fontSize: 13),
+                      )
+                    : Container(),
                   ],
                 ),
               ),

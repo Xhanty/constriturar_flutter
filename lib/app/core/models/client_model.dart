@@ -9,8 +9,8 @@ class ClientModel {
   final String nombreCompleto;
   final String identificacion;
   final String encargado;
-  final List<DocumentTypeModel> tipoDocumento;
-  final List<UserModel> user;
+  final DocumentTypeModel tipoDocumento;
+  final UserModel user;
   final List<String> empresa;
   final String saldoCliente;
 
@@ -37,10 +37,8 @@ class ClientModel {
       nombreCompleto: json['nombreCompleto'],
       identificacion: json['identificacion'],
       encargado: json['encargado'],
-      tipoDocumento: List<DocumentTypeModel>.from(
-          json['tipoDocumento'].map((x) => DocumentTypeModel.fromJson(x))),
-      user:
-          List<UserModel>.from(json['user'].map((x) => UserModel.fromJson(x))),
+      tipoDocumento: DocumentTypeModel.fromJson(json['tipoDocumento']),
+      user: UserModel.fromJson(json['user']),
       empresa: List<String>.from(json['empresa']),
       saldoCliente: json['saldoCliente'],
     );
@@ -55,8 +53,8 @@ class ClientModel {
       'nombreCompleto': nombreCompleto,
       'identificacion': identificacion,
       'encargado': encargado,
-      'tipoDocumento': tipoDocumento,
-      'user': user,
+      'tipoDocumento': tipoDocumento.toJson(),
+      'user': user.toJson(),
       'empresa': empresa,
       'saldoCliente': saldoCliente,
     };

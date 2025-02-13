@@ -56,7 +56,7 @@ class RequestService {
   }
 
   // Método para realizar una petición GET
-  Future<dynamic> get(String url) async {
+  Future<Map<String, dynamic>?> get(String url) async {
     final response = await _makeRequest(() async => http.get(
           Uri.parse('$_baseUrl/$url'),
           headers: {
@@ -66,7 +66,12 @@ class RequestService {
           },
         ));
 
-    return response != null ? json.decode(response.body) : null;
+    return response != null
+        ? {
+            'statusCode': response.statusCode,
+            'body': json.decode(response.body)
+          }
+        : null;
   }
 
   // Método para realizar una petición POST
@@ -81,7 +86,12 @@ class RequestService {
           body: jsonEncode(body),
         ));
 
-    return response != null ? json.decode(response.body) : null;
+    return response != null
+        ? {
+            'statusCode': response.statusCode,
+            'body': json.decode(response.body)
+          }
+        : null;
   }
 
   // Método para realizar una petición PUT
@@ -96,7 +106,12 @@ class RequestService {
           body: jsonEncode(body),
         ));
 
-    return response != null ? json.decode(response.body) : null;
+    return response != null
+        ? {
+            'statusCode': response.statusCode,
+            'body': json.decode(response.body)
+          }
+        : null;
   }
 
   // Método para realizar una petición PATCH
@@ -111,6 +126,11 @@ class RequestService {
           body: jsonEncode(body),
         ));
 
-    return response != null ? json.decode(response.body) : null;
+    return response != null
+        ? {
+            'statusCode': response.statusCode,
+            'body': json.decode(response.body)
+          }
+        : null;
   }
 }

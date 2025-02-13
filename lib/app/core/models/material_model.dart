@@ -4,8 +4,8 @@ class MaterialModel {
   final int materialId;
   final String materialNombre;
   final String normaTecnica;
-  final String valorBase;
-  final List<UnitModel> unidad;
+  final double valorBase;
+  final UnitModel unidad;
 
   MaterialModel({
     required this.materialId,
@@ -21,8 +21,7 @@ class MaterialModel {
       materialNombre: json['materialNombre'],
       normaTecnica: json['normaTecnica'],
       valorBase: json['valorBase'],
-      unidad: List<UnitModel>.from(
-          json['unidad'].map((x) => UnitModel.fromJson(x))),
+      unidad: UnitModel.fromJson(json['unidad']),
     );
   }
 
@@ -32,7 +31,7 @@ class MaterialModel {
       'materialNombre': materialNombre,
       'normaTecnica': normaTecnica,
       'valorBase': valorBase,
-      'unidad': unidad,
+      'unidad': unidad.toJson(),
     };
   }
 }

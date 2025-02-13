@@ -9,10 +9,10 @@ class WorkModel {
   final String nombreContacto;
   final String ubicacion;
   final String direccion;
-  final List<CityModel> municipio;
-  final List<ClientModel> cliente;
+  final CityModel municipio;
+  final ClientModel cliente;
   final List<String> empresa;
-  final List<DepartmentModel> departamento;
+  final DepartmentModel departamento;
 
   WorkModel({
     required this.obraId,
@@ -35,13 +35,10 @@ class WorkModel {
       nombreContacto: json['nombreContacto'],
       ubicacion: json['ubicacion'],
       direccion: json['direccion'],
-      municipio: List<CityModel>.from(
-          json['municipio'].map((x) => CityModel.fromJson(x))),
-      cliente: List<ClientModel>.from(
-          json['cliente'].map((x) => ClientModel.fromJson(x))),
+      municipio: CityModel.fromJson(json['municipio']),
+      cliente: ClientModel.fromJson(json['cliente']),
       empresa: List<String>.from(json['empresa']),
-      departamento: List<DepartmentModel>.from(
-          json['departamento'].map((x) => DepartmentModel.fromJson(x))),
+      departamento: DepartmentModel.fromJson(json['departamento']),
     );
   }
 
@@ -53,10 +50,10 @@ class WorkModel {
       'nombreContacto': nombreContacto,
       'ubicacion': ubicacion,
       'direccion': direccion,
-      'municipio': municipio,
-      'cliente': cliente,
+      'municipio': municipio.toJson(),
+      'cliente': cliente.toJson(),
       'empresa': empresa,
-      'departamento': departamento,
+      'departamento': departamento.toJson(),
     };
   }
 }

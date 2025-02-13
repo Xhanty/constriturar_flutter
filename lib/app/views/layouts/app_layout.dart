@@ -1,5 +1,8 @@
+import 'package:constriturar/app/core/services/auth_service.dart';
+import 'package:constriturar/app/views/modules/home/home_page.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
+import 'package:constriturar/app/routes/routes.dart';
 import 'package:constriturar/app/core/components/side_menu.dart';
 import 'package:constriturar/app/core/config/app_colors.dart';
 
@@ -13,6 +16,7 @@ class AppLayout extends StatefulWidget {
 
 class _AppLayoutState extends State<AppLayout>
     with SingleTickerProviderStateMixin {
+  final AuthService _authService = AuthService();
   late AnimationController _animationController;
   late Animation<double> animation;
   late Animation<double> scalAnimation;
@@ -94,12 +98,17 @@ class _AppLayoutState extends State<AppLayout>
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                SizedBox(
-                  height: 36,
-                  width: 36,
-                  child: Icon(
-                    Icons.home,
-                    color: AppColors.white,
+                GestureDetector(
+                  onTap: () {
+                    AppRoutes.setView(HomePage(), context);
+                  },
+                  child: SizedBox(
+                    height: 36,
+                    width: 36,
+                    child: Icon(
+                      Icons.home,
+                      color: AppColors.white,
+                    ),
                   ),
                 ),
                 SizedBox(
@@ -118,12 +127,18 @@ class _AppLayoutState extends State<AppLayout>
                     color: AppColors.white,
                   ),
                 ),
-                SizedBox(
-                  height: 36,
-                  width: 36,
-                  child: Icon(
-                    Icons.logout,
-                    color: AppColors.white,
+                GestureDetector(
+                  onTap: () {
+                    _authService.logout();
+                    Navigator.pushReplacementNamed(context, AppRoutes.login);
+                  },
+                  child: SizedBox(
+                    height: 36,
+                    width: 36,
+                    child: Icon(
+                      Icons.logout,
+                      color: AppColors.white,
+                    ),
                   ),
                 ),
               ],

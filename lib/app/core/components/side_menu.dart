@@ -1,4 +1,8 @@
+import 'package:constriturar/app/core/models/business_model.dart';
 import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'package:constriturar/app/core/models/user_model.dart';
+import 'package:constriturar/app/core/services/secure_storage_service.dart';
 import 'package:constriturar/app/views/modules/configuration/units/units_page.dart';
 import 'package:constriturar/app/views/modules/configuration/materials/materials_page.dart';
 import 'package:constriturar/app/views/modules/home/home_page.dart';
@@ -17,6 +21,29 @@ class SideMenu extends StatefulWidget {
 
 class SideMenuState extends State<SideMenu> {
   final AuthService _authService = AuthService();
+  final SecureStorageService _secureStorageService = SecureStorageService();
+  late UserModel _user = UserModel(
+    id: '',
+    userName: '',
+    email: '',
+    phoneNumber: '',
+    estado: '',
+    empresa: BusinessModel(empresaId: 0, nombre: '', codigo: ''),
+    roles: [],
+  );
+
+  @override
+  void initState() {
+    super.initState();
+    _getDataUser();
+  }
+
+  void _getDataUser() async {
+    final userData = await _secureStorageService.getUserData();
+    setState(() {
+      _user = UserModel.fromJson(jsonDecode(userData!));
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +55,7 @@ class SideMenuState extends State<SideMenu> {
       child: SafeArea(
         child: Column(
           children: [
-            InfoCard(name: 'Santiago Henao', role: 'Administrador'),
+            InfoCard(name: _user.userName, role: _user.empresa.nombre),
             Padding(
               padding: const EdgeInsets.only(left: 24, top: 5, bottom: 5),
             ),
@@ -186,10 +213,13 @@ class InfoCard extends StatelessWidget {
         child: Icon(Icons.person, color: AppColors.primary),
       ),
       title: Text(
-        name,
+        name.length > 14 ? '${name.substring(0, 14)}...' : name,
         style: TextStyle(color: AppColors.lightPrimary),
       ),
-      subtitle: Text(role, style: TextStyle(color: AppColors.lightPrimary)),
+      subtitle: Text(
+        role.length > 20 ? '${role.substring(0, 20)}...' : role,
+        style: TextStyle(color: AppColors.lightPrimary),
+      ),
     );
   }
 }

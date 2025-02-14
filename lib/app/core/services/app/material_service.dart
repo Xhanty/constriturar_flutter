@@ -22,7 +22,7 @@ class MaterialService {
     final url = 'materiales/get-material-by-id/${material.materialId}';
     final response = await _requestService.get(url);
 
-   if (response != null && response["statusCode"] == 200) {
+    if (response != null && response["statusCode"] == 200) {
       final responseData = response["body"];
       return MaterialModel.fromJson(responseData);
     }
@@ -42,6 +42,21 @@ class MaterialService {
   Future<bool> update(MaterialModel material) async {
     final url = 'materiales/${material.materialId}';
     final response = await _requestService.put(url, material.toJson());
+
+    return response != null && response["statusCode"] == 204;
+  }
+
+  // Método para desactivar un material
+  Future<bool> disable(MaterialModel material) async {
+    final url = 'materiales/update-material-estado/${material.materialId}';
+    final body = [
+      {
+        "op": "replace",
+        "path": "/Estado",
+        "value": 'I',
+      },
+    ];
+    final response = await _requestService.patch(url, body);
 
     return response != null && response["statusCode"] == 204;
   }

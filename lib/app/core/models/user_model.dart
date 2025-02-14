@@ -1,9 +1,12 @@
+import 'package:constriturar/app/core/models/business_model.dart';
+
 class UserModel {
   final String id;
   final String userName;
   final String email;
   final String phoneNumber;
   final String estado;
+  final BusinessModel empresa;
   final List<String> roles;
 
   UserModel({
@@ -12,6 +15,7 @@ class UserModel {
     required this.email,
     required this.phoneNumber,
     required this.estado,
+    required this.empresa,
     required this.roles,
   });
 
@@ -22,6 +26,7 @@ class UserModel {
       email: json['email'],
       phoneNumber: json['phoneNumber'],
       estado: json['estado'],
+      empresa: BusinessModel.fromJson(json['empresa']),
       roles: List<String>.from(json['roles']),
     );
   }
@@ -33,6 +38,7 @@ class UserModel {
       'email': email,
       'phoneNumber': phoneNumber,
       'estado': estado,
+      'empresa': empresa.toJson(),
       'roles': roles,
     };
   }

@@ -49,7 +49,8 @@ class _MaterialsPageState extends State<MaterialsPage> {
     final query = _searchController.text.toLowerCase();
     setState(() {
       _filteredMaterials = _materials.where((material) {
-        return material.materialNombre!.toLowerCase().contains(query);
+        return material.materialNombre!.toLowerCase().contains(query) ||
+            material.normaTecnica!.toLowerCase().contains(query);
       }).toList();
     });
   }
@@ -133,16 +134,22 @@ class _MaterialsPageState extends State<MaterialsPage> {
                             context: context,
                             builder: (context) {
                               return AlertDialog(
-                                title: const Text("Eliminar material"),
+                                title: const Text("Deshabilitar material"),
                                 content: const Text(
-                                    "¿Está seguro que desea eliminar este material?"),
+                                    "¿Está seguro que desea deshabilitar este material?"),
                                 actions: [
                                   TextButton(
                                     onPressed: () => Navigator.pop(context),
                                     child: const Text("Cancelar"),
                                   ),
                                   TextButton(
-                                    onPressed: () => Navigator.pop(context),
+                                    onPressed: () async {
+                                      await _materialService.disable(material);
+                                      if (context.mounted) {
+                                        Navigator.pop(context);
+                                      }
+                                      _refreshMaterials();
+                                    },
                                     child: const Text("Aceptar"),
                                   ),
                                 ],

@@ -32,6 +32,9 @@ class AuthService {
           responseData['refreshToken'],
         );
 
+        // Obtener los datos del usuario
+        await getUserData();
+
         return {'success': true};
       } else {
         return {'error': 'Credenciales incorrectas'};
@@ -41,8 +44,37 @@ class AuthService {
     }
   }
 
+  // Método para obtener los datos del usuario
+  Future<Map<String, dynamic>> getUserData() async {
+    final url = Uri.parse('$_baseUrl/auth/users/current-user');
+
+    try {
+      final response = await http.get(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${await _secureStorageService.getAccessToken()}',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+
+        // Guardar los datos del usuario en almacenamiento seguro
+        await _secureStorageService.saveUserData(jsonEncode(responseData));
+
+        return {'success': true};
+      } else {
+        return {'error': 'Error al obtener los datos del usuario'};
+      }
+    } catch (ex) {
+      return {'error': 'Error al conectar con el servidor'};
+    }
+  }
+
   // Método para cerrar sesión
   Future<void> logout() async {
     await _secureStorageService.clearTokens();
+    await _secureStorageService.clearUserData();
   }
 }

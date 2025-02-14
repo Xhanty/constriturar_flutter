@@ -45,4 +45,19 @@ class UnitService {
 
     return response != null && response["statusCode"] == 204;
   }
+
+  // Método para desactivar una unidad
+  Future<bool> disable(UnitModel unit) async {
+    final url = 'unidades/update-unidad-estado/${unit.unidadId}';
+    final body = [
+      {
+        "op": "replace",
+        "path": "/Estado",
+        "value": 'I',
+      },
+    ];
+    final response = await _requestService.patch(url, body);
+
+    return response != null && response["statusCode"] == 204;
+  }
 }

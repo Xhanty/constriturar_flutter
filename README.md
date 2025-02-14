@@ -74,6 +74,12 @@ flutter run --dart-define=ENV=prod
 
 ---
 
+## ** Generar APK **
+- Pruebas: flutter build apk
+- Producción: 
+
+---
+
 ## **Recomendaciones**
 - Mantén el archivo `pubspec.yaml` actualizado con cualquier nuevo asset.
 - No incluyas archivos sensibles en los archivos de configuración por ambiente.

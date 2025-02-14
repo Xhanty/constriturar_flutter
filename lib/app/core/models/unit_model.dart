@@ -1,10 +1,10 @@
 class UnitModel {
   final int unidadId;
-  final String unidadDescripcion;
+  final String? unidadDescripcion;
 
   UnitModel({
     required this.unidadId,
-    required this.unidadDescripcion,
+    this.unidadDescripcion,
   });
 
   factory UnitModel.fromJson(Map<String, dynamic> json) {

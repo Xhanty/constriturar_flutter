@@ -18,8 +18,8 @@ class UnitService {
   }
 
   // Método para obtener una unidad por su id
-  Future<UnitModel?> getById(UnitModel material) async {
-    final url = 'unidades/get-unidad-by-id/${material.unidadId}';
+  Future<UnitModel?> getById(UnitModel unit) async {
+    final url = 'unidades/get-unidad-by-id/${unit.unidadId}';
     final response = await _requestService.get(url);
 
     if (response != null && response["statusCode"] == 200) {
@@ -31,18 +31,18 @@ class UnitService {
   }
 
   // Método para crear una unidad
-  Future<bool> create(UnitModel material) async {
+  Future<bool> create(UnitModel unit) async {
     final url = 'unidades';
-    final response = await _requestService.post(url, material.toJson());
+    final response = await _requestService.post(url, unit.toJson());
 
     return response != null && response["statusCode"] == 201;
   }
 
   // Método para actualizar una unidad
-  Future<bool> update(UnitModel material) async {
-    final url = 'unidades/${material.unidadId}';
-    final response = await _requestService.put(url, material.toJson());
+  Future<bool> update(UnitModel unit) async {
+    final url = 'unidades/${unit.unidadId}';
+    final response = await _requestService.put(url, unit.toJson());
 
-    return response != null && response["statusCode"] == 200;
+    return response != null && response["statusCode"] == 204;
   }
 }

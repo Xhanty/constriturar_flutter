@@ -2,17 +2,19 @@ import 'package:constriturar/app/core/models/unit_model.dart';
 
 class MaterialModel {
   final int materialId;
-  final String materialNombre;
-  final String normaTecnica;
-  final double valorBase;
-  final UnitModel unidad;
+  final String? materialNombre;
+  final String? normaTecnica;
+  final double? valorBase;
+  final UnitModel? unidad;
+  final int? unidadId;
 
   MaterialModel({
     required this.materialId,
-    required this.materialNombre,
-    required this.normaTecnica,
-    required this.valorBase,
-    required this.unidad,
+    this.materialNombre,
+    this.normaTecnica,
+    this.valorBase,
+    this.unidad,
+    this.unidadId,
   });
 
   factory MaterialModel.fromJson(Map<String, dynamic> json) {
@@ -22,6 +24,7 @@ class MaterialModel {
       normaTecnica: json['normaTecnica'],
       valorBase: json['valorBase'],
       unidad: UnitModel.fromJson(json['unidad']),
+      unidadId: json['unidad']['unidadId'],
     );
   }
 
@@ -31,7 +34,8 @@ class MaterialModel {
       'materialNombre': materialNombre,
       'normaTecnica': normaTecnica,
       'valorBase': valorBase,
-      'unidad': unidad.toJson(),
+      'unidad': unidad?.toJson(),
+      'unidadId': unidadId,
     };
   }
 }

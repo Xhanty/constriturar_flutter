@@ -109,7 +109,7 @@ class RequestService {
     return response != null
         ? {
             'statusCode': response.statusCode,
-            'body': json.decode(response.body)
+            // 'body': json.decode(response.body)
           }
         : null;
   }
@@ -129,7 +129,7 @@ class RequestService {
     return response != null
         ? {
             'statusCode': response.statusCode,
-            'body': json.decode(response.body)
+            // 'body': json.decode(response.body)
           }
         : null;
   }

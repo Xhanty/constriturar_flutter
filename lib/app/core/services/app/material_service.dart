@@ -43,6 +43,6 @@ class MaterialService {
     final url = 'materiales/${material.materialId}';
     final response = await _requestService.put(url, material.toJson());
 
-    return response != null && response["statusCode"] == 200;
+    return response != null && response["statusCode"] == 204;
   }
 }

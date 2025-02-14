@@ -14,24 +14,51 @@ class MaterialsPage extends StatefulWidget {
 }
 
 class _MaterialsPageState extends State<MaterialsPage> {
+  final TextEditingController _searchController = TextEditingController();
   final MaterialService _materialService = MaterialService();
   List<MaterialModel> _materials = [];
+  List<MaterialModel> _filteredMaterials = [];
   bool _isLoading = false;
 
   @override
   void initState() {
     super.initState();
     _isLoading = true;
-    _getUnits();
+    _getMaterials();
+    _searchController.addListener(_filterMaterials);
   }
 
-  void _getUnits() async {
+  @override
+  void dispose() {
+    _searchController.removeListener(_filterMaterials);
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  void _getMaterials() async {
     final materials = await _materialService.getAll();
     if (!mounted) return;
     setState(() {
       _materials = materials;
+      _filteredMaterials = materials;
       _isLoading = false;
     });
+  }
+
+  void _filterMaterials() {
+    final query = _searchController.text.toLowerCase();
+    setState(() {
+      _filteredMaterials = _materials.where((material) {
+        return material.materialNombre!.toLowerCase().contains(query);
+      }).toList();
+    });
+  }
+
+  void _refreshMaterials() {
+    setState(() {
+      _isLoading = true;
+    });
+    _getMaterials();
   }
 
   @override
@@ -51,6 +78,7 @@ class _MaterialsPageState extends State<MaterialsPage> {
                 Padding(
                   padding: const EdgeInsets.all(11),
                   child: TextField(
+                    controller: _searchController,
                     decoration: InputDecoration(
                       hintText: "Buscar material",
                       prefixIcon: Icon(Icons.search),
@@ -63,16 +91,16 @@ class _MaterialsPageState extends State<MaterialsPage> {
                 Expanded(
                   child: ListView.builder(
                     physics: const BouncingScrollPhysics(),
-                    itemCount: _materials.length,
+                    itemCount: _filteredMaterials.length,
                     itemBuilder: (context, index) {
-                      final material = _materials[index];
+                      final material = _filteredMaterials[index];
                       return CardSimple(
                         id: material.materialId,
-                        title: material.materialNombre,
+                        title: material.materialNombre!,
                         description: material.normaTecnica,
                         icon: Icons.cabin,
-                        onEdit: (id) => {
-                          showMaterialModalBottomSheet(
+                        onEdit: (id) async {
+                          final result = await showMaterialModalBottomSheet(
                             context: context,
                             shape: ShapeBorder.lerp(
                               RoundedRectangleBorder(
@@ -91,11 +119,14 @@ class _MaterialsPageState extends State<MaterialsPage> {
                             ),
                             builder: (context) {
                               return FractionallySizedBox(
-                                heightFactor: 0.6,
+                                heightFactor: 0.7,
                                 child: MaterialsForm(id: id),
                               );
                             },
-                          )
+                          );
+                          if (result == true) {
+                            _refreshMaterials();
+                          }
                         },
                         onDelete: (id) => {
                           showDialog(
@@ -126,8 +157,8 @@ class _MaterialsPageState extends State<MaterialsPage> {
               ],
             ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => {
-          showMaterialModalBottomSheet(
+        onPressed: () async {
+          final result = await showMaterialModalBottomSheet(
             context: context,
             shape: ShapeBorder.lerp(
               RoundedRectangleBorder(
@@ -146,11 +177,14 @@ class _MaterialsPageState extends State<MaterialsPage> {
             ),
             builder: (context) {
               return FractionallySizedBox(
-                heightFactor: 0.6,
+                heightFactor: 0.7,
                 child: MaterialsForm(),
               );
             },
-          )
+          );
+          if (result == true) {
+            _refreshMaterials();
+          }
         },
         backgroundColor: AppColors.primary,
         tooltip: 'Agregar material',

@@ -15,7 +15,9 @@ class UnitsPage extends StatefulWidget {
 
 class _UnitsPageState extends State<UnitsPage> {
   final UnitService _unitService = UnitService();
+  final TextEditingController _searchController = TextEditingController();
   List<UnitModel> _units = [];
+  List<UnitModel> _filteredUnits = [];
   bool _isLoading = false;
 
   @override
@@ -23,6 +25,14 @@ class _UnitsPageState extends State<UnitsPage> {
     super.initState();
     _isLoading = true;
     _getUnits();
+    _searchController.addListener(_filterUnits);
+  }
+
+  @override
+  void dispose() {
+    _searchController.removeListener(_filterUnits);
+    _searchController.dispose();
+    super.dispose();
   }
 
   void _getUnits() async {
@@ -30,8 +40,25 @@ class _UnitsPageState extends State<UnitsPage> {
     if (!mounted) return;
     setState(() {
       _units = units;
+      _filteredUnits = units;
       _isLoading = false;
     });
+  }
+
+  void _filterUnits() {
+    final query = _searchController.text.toLowerCase();
+    setState(() {
+      _filteredUnits = _units.where((unit) {
+        return unit.unidadDescripcion!.toLowerCase().contains(query);
+      }).toList();
+    });
+  }
+
+  void _refreshUnits() {
+    setState(() {
+      _isLoading = true;
+    });
+    _getUnits();
   }
 
   @override
@@ -51,6 +78,7 @@ class _UnitsPageState extends State<UnitsPage> {
                 Padding(
                   padding: const EdgeInsets.all(11),
                   child: TextField(
+                    controller: _searchController,
                     decoration: InputDecoration(
                       hintText: "Buscar unidad",
                       prefixIcon: Icon(Icons.search),
@@ -63,60 +91,63 @@ class _UnitsPageState extends State<UnitsPage> {
                 Expanded(
                   child: ListView.builder(
                     physics: const BouncingScrollPhysics(),
-                    itemCount: _units.length,
+                    itemCount: _filteredUnits.length,
                     itemBuilder: (context, index) {
-                      final unit = _units[index];
+                      final unit = _filteredUnits[index];
                       return CardSimple(
                         id: unit.unidadId,
-                        title: unit.unidadDescripcion,
+                        title: unit.unidadDescripcion!,
                         icon: Icons.straighten,
-                        onEdit: (id) => {
-                          showMaterialModalBottomSheet(
-                            context: context,
-                            shape: ShapeBorder.lerp(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(20),
-                                  topRight: Radius.circular(20),
-                                ),
-                              ),
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(20),
-                                  topRight: Radius.circular(20),
-                                ),
-                              ),
-                              0,
-                            ),
-                            builder: (context) {
-                              return FractionallySizedBox(
-                                heightFactor: 0.5,
-                                child: UnitsForm(id: id),
-                              );
-                            },
-                          )
+                        onEdit: (id) async {
+                          // final result = await showMaterialModalBottomSheet(
+                          //   context: context,
+                          //   shape: ShapeBorder.lerp(
+                          //     RoundedRectangleBorder(
+                          //       borderRadius: BorderRadius.only(
+                          //         topLeft: Radius.circular(20),
+                          //         topRight: Radius.circular(20),
+                          //       ),
+                          //     ),
+                          //     RoundedRectangleBorder(
+                          //       borderRadius: BorderRadius.only(
+                          //         topLeft: Radius.circular(20),
+                          //         topRight: Radius.circular(20),
+                          //       ),
+                          //     ),
+                          //     0,
+                          //   ),
+                          //   builder: (context) {
+                          //     return FractionallySizedBox(
+                          //       heightFactor: 0.5,
+                          //       child: UnitsForm(id: id),
+                          //     );
+                          //   },
+                          // );
+                          // if (result == true) {
+                          //   _refreshUnits();
+                          // }
                         },
-                        onDelete: (id) => {
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                title: const Text("Eliminar unidad"),
-                                content: const Text(
-                                    "¿Está seguro que desea eliminar esta unidad?"),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () => Navigator.pop(context),
-                                    child: const Text("Cancelar"),
-                                  ),
-                                  TextButton(
-                                    onPressed: () => Navigator.pop(context),
-                                    child: const Text("Aceptar"),
-                                  ),
-                                ],
-                              );
-                            },
-                          )
+                        onDelete: (id) {
+                          // showDialog(
+                          //   context: context,
+                          //   builder: (context) {
+                          //     return AlertDialog(
+                          //       title: const Text("Eliminar unidad"),
+                          //       content: const Text(
+                          //           "¿Está seguro que desea eliminar esta unidad?"),
+                          //       actions: [
+                          //         TextButton(
+                          //           onPressed: () => Navigator.pop(context),
+                          //           child: const Text("Cancelar"),
+                          //         ),
+                          //         TextButton(
+                          //           onPressed: () => Navigator.pop(context),
+                          //           child: const Text("Aceptar"),
+                          //         ),
+                          //       ],
+                          //     );
+                          //   },
+                          // );
                         },
                       );
                     },
@@ -125,8 +156,8 @@ class _UnitsPageState extends State<UnitsPage> {
               ],
             ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => {
-          showMaterialModalBottomSheet(
+        onPressed: () async {
+          final result = await showMaterialModalBottomSheet(
             context: context,
             shape: ShapeBorder.lerp(
               RoundedRectangleBorder(
@@ -149,7 +180,10 @@ class _UnitsPageState extends State<UnitsPage> {
                 child: UnitsForm(),
               );
             },
-          )
+          );
+          if (result == true) {
+            _refreshUnits();
+          }
         },
         backgroundColor: AppColors.primary,
         tooltip: 'Agregar unidad',

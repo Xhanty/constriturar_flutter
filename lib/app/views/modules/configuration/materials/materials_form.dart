@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:constriturar/app/core/models/material_model.dart';
+import 'package:constriturar/app/core/services/app/material_service.dart';
 import 'package:constriturar/app/widgets/rounded_button.dart';
 import 'package:constriturar/app/widgets/rounded_input_field.dart';
 import 'package:constriturar/app/core/config/app_colors.dart';
@@ -16,13 +18,70 @@ class _MaterialsFormState extends State<MaterialsForm> {
   final _nameController = TextEditingController();
   final _normaController = TextEditingController();
   final _valorController = TextEditingController();
+  final _unidadIdController = TextEditingController();
+
+  final MaterialService _materialService = MaterialService();
 
   bool _isLoading = false;
 
-  void _handleUpdAdd() {
+  @override
+  void initState() {
+    super.initState();
+    if (widget.id != null) {
+      _loadUnit();
+    }
+  }
+
+  void _loadUnit() async {
     setState(() {
       _isLoading = true;
     });
+    final material =
+        await _materialService.getById(MaterialModel(materialId: widget.id!));
+    if (material != null) {
+      _nameController.text = material.materialNombre!;
+      _normaController.text = material.normaTecnica!;
+      _valorController.text = material.valorBase.toString();
+      _unidadIdController.text = material.unidadId.toString();
+    }
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
+  void _handleUpdAdd() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    final material = MaterialModel(
+      materialId: widget.id ?? 0,
+      materialNombre: _nameController.text,
+      normaTecnica: _normaController.text,
+      valorBase: double.parse(_valorController.text),
+      unidadId: int.parse(_unidadIdController.text),
+    );
+
+    bool success;
+
+    if (widget.id != null) {
+      success = await _materialService.update(material);
+    } else {
+      success = await _materialService.create(material);
+    }
+
+    setState(() {
+      _isLoading = false;
+    });
+
+    if (!mounted) return;
+    if (success) {
+      Navigator.pop(context, true);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error al ${widget.id != null ? 'modificar' : 'agregar'} el material')),
+      );
+    }
   }
 
   @override
@@ -69,6 +128,11 @@ class _MaterialsFormState extends State<MaterialsForm> {
                     hintText: "Valor base",
                     icon: Icons.text_fields,
                     controller: _valorController,
+                  ),
+                  RoundedInputField(
+                    hintText: "Unidad",
+                    icon: Icons.text_fields,
+                    controller: _unidadIdController,
                   ),
                   _isLoading
                       ? const CircularProgressIndicator()

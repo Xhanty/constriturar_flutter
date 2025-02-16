@@ -1,6 +1,10 @@
-import 'package:constriturar/app/core/models/business_model.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
+import 'package:constriturar/app/core/models/business_model.dart';
+import 'package:constriturar/app/views/modules/clients/clients_page.dart';
+import 'package:constriturar/app/views/modules/configuration/vehicles/vehicles_page.dart';
+import 'package:constriturar/app/views/modules/users/users_page.dart';
+import 'package:constriturar/app/views/modules/works/works_page.dart';
 import 'package:constriturar/app/core/models/user_model.dart';
 import 'package:constriturar/app/core/services/secure_storage_service.dart';
 import 'package:constriturar/app/views/modules/configuration/units/units_page.dart';
@@ -95,7 +99,7 @@ class _SideMenuOptionsState extends State<SideMenuOptions> {
       'title': 'Clientes',
       'label': 'Clients',
       'isVisible': true,
-      'view': HomePage(),
+      'view': ClientsPage(),
     },
     {
       'icon': Icons.cabin,
@@ -109,14 +113,14 @@ class _SideMenuOptionsState extends State<SideMenuOptions> {
       'title': 'Obras',
       'label': 'Projects',
       'isVisible': true,
-      'view': HomePage(),
+      'view': WorksPage(),
     },
     {
       'icon': Icons.person_search,
       'title': 'Usuarios',
       'label': 'Users',
       'isVisible': true,
-      'view': HomePage(),
+      'view': UsersPage(),
     },
     {
       'icon': Icons.straighten,
@@ -130,7 +134,7 @@ class _SideMenuOptionsState extends State<SideMenuOptions> {
       'title': 'Vehículos',
       'label': 'Vehicles',
       'isVisible': true,
-      'view': HomePage(),
+      'view': VehiclesPage(),
     },
   ];
 

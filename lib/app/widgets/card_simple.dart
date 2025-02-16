@@ -12,7 +12,7 @@ class CardSimple extends StatefulWidget {
     required this.onDelete,
   });
 
-  final int id;
+  final dynamic id;
   final String title;
   final String? description;
   final IconData icon;

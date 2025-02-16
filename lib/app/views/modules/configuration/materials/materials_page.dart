@@ -200,14 +200,6 @@ class _MaterialsPageState extends State<MaterialsPage> {
           color: AppColors.lightPrimary,
         ),
       ),
-
-      // body: const Center(
-      //   child: CardSimple(
-      //     title: "Material 1",
-      //     description: "Descripción del material 1",
-      //     icon: Icons.ac_unit,
-      //   ),
-      // ),
     );
   }
 }

@@ -59,7 +59,7 @@ class SideMenuState extends State<SideMenu> {
       child: SafeArea(
         child: Column(
           children: [
-            InfoCard(name: _user.userName, role: _user.empresa.nombre),
+            InfoCard(name: _user.userName, role: _user.empresa!.nombre),
             Padding(
               padding: const EdgeInsets.only(left: 24, top: 5, bottom: 5),
             ),

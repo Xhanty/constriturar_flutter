@@ -20,8 +20,8 @@ class RequestService {
           'Content-Type': 'application/json',
         },
         body: jsonEncode({
-          'accessToken': accessToken,
-          'refreshToken': refreshToken,
+          'AccessToken': accessToken,
+          'RefreshToken': refreshToken,
         }),
       );
 
@@ -65,6 +65,9 @@ class RequestService {
             'Content-Type': 'application/json'
           },
         ));
+
+    // debugPrint('Response status: ${response?.statusCode}');
+    // debugPrint('Response body: ${response?.body}');
 
     return response != null
         ? {

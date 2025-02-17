@@ -1,22 +1,22 @@
 import 'package:constriturar/app/core/models/business_model.dart';
 
 class UserModel {
-  final String id;
-  final String userName;
-  final String email;
-  final String phoneNumber;
-  final String estado;
+  final String? id;
+  final String? userName;
+  final String? email;
+  final String? phoneNumber;
+  final String? estado;
   final BusinessModel? empresa;
-  final List<String> roles;
+  final List<String>? roles;
 
   UserModel({
-    required this.id,
-    required this.userName,
-    required this.email,
-    required this.phoneNumber,
-    required this.estado,
+    this.id,
+    this.userName,
+    this.email,
+    this.phoneNumber,
+    this.estado,
     this.empresa,
-    required this.roles,
+    this.roles,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {

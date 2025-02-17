@@ -41,6 +41,30 @@ class _UnitsFormState extends State<UnitsForm> {
   }
 
   void _handleUpdAdd() async {
+
+    // Validar que los campos no estén vacíos
+    if (_nameController.text.trim().isEmpty) {
+      // Alert dialog
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Alerta'),
+            content: Text('El nombre es obligatorio'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('Aceptar'),
+              ),
+            ],
+          );
+        },
+      );
+      return;
+    }
+
     setState(() {
       _isLoading = true;
     });

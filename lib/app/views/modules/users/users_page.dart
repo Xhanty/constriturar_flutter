@@ -49,8 +49,8 @@ class _UsersPageState extends State<UsersPage> {
     final query = _searchController.text.toLowerCase();
     setState(() {
       _filteredUsers = _users.where((user) {
-        return user.userName.toLowerCase().contains(query) ||
-            user.email.toLowerCase().contains(query);
+        return user.userName!.toLowerCase().contains(query) ||
+            user.email!.toLowerCase().contains(query);
       }).toList();
     });
   }
@@ -93,37 +93,40 @@ class _UsersPageState extends State<UsersPage> {
                       final usuario = _filteredUsers[index];
                       return CardSimple(
                         id: usuario.id,
-                        title: usuario.userName,
+                        title: usuario.userName!,
                         description: usuario.email,
                         icon: Icons.person_search,
+                        backgroundColor: usuario.estado == 'I'
+                            ? AppColors.dangerLight
+                            : AppColors.white,
                         onEdit: (id) async {
-                          final result = await showMaterialModalBottomSheet(
-                            context: context,
-                            shape: ShapeBorder.lerp(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(20),
-                                  topRight: Radius.circular(20),
-                                ),
-                              ),
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(20),
-                                  topRight: Radius.circular(20),
-                                ),
-                              ),
-                              0,
-                            ),
-                            builder: (context) {
-                              return FractionallySizedBox(
-                                heightFactor: 0.7,
-                                child: UsersForm(id: id),
-                              );
-                            },
-                          );
-                          if (result == true) {
-                            _refreshUsers();
-                          }
+                          // final result = await showMaterialModalBottomSheet(
+                          //   context: context,
+                          //   shape: ShapeBorder.lerp(
+                          //     RoundedRectangleBorder(
+                          //       borderRadius: BorderRadius.only(
+                          //         topLeft: Radius.circular(20),
+                          //         topRight: Radius.circular(20),
+                          //       ),
+                          //     ),
+                          //     RoundedRectangleBorder(
+                          //       borderRadius: BorderRadius.only(
+                          //         topLeft: Radius.circular(20),
+                          //         topRight: Radius.circular(20),
+                          //       ),
+                          //     ),
+                          //     0,
+                          //   ),
+                          //   builder: (context) {
+                          //     return FractionallySizedBox(
+                          //       heightFactor: 0.7,
+                          //       child: UsersForm(id: id),
+                          //     );
+                          //   },
+                          // );
+                          // if (result == true) {
+                          //   _refreshUsers();
+                          // }
                         },
                         onDelete: (id) => {
                           showDialog(

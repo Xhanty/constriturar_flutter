@@ -6,4 +6,5 @@ class AppColors {
   static const primary = Color(0xFF002857);
   static const lightPrimary = Color(0xFFF4F5F8);
   static const lightShadow = Color(0xFFDADFF0);
+  static const dangerLight = Color(0xFFFFEBEE);
 }

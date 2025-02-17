@@ -1,22 +1,22 @@
 class VehicleModel {
   final int vehiculoId;
-  final String vehiculoDescripcion;
-  final String capacidad;
-  final String fechaVenceSoat;
-  final String fechaVenceTecno;
-  final String modelo;
-  final String marca;
-  final String placa;
+  final String? vehiculoDescripcion;
+  final int? capacidad;
+  final String? fechaVenceSoat;
+  final String? fechaVenceTecno;
+  final String? modelo;
+  final String? marca;
+  final String? placa;
 
   VehicleModel({
     required this.vehiculoId,
-    required this.vehiculoDescripcion,
-    required this.capacidad,
-    required this.fechaVenceSoat,
-    required this.fechaVenceTecno,
-    required this.modelo,
-    required this.marca,
-    required this.placa,
+    this.vehiculoDescripcion,
+    this.capacidad,
+    this.fechaVenceSoat,
+    this.fechaVenceTecno,
+    this.modelo,
+    this.marca,
+    this.placa,
   });
 
   factory VehicleModel.fromJson(Map<String, dynamic> json) {

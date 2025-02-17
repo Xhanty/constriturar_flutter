@@ -1,9 +1,6 @@
-// Paquetes propios de Flutter
-import 'package:constriturar/app/core/models/unit_model.dart';
 import 'package:flutter/material.dart';
-// Paquetes o librerías de terceros
-import 'package:drop_down_search_field/drop_down_search_field.dart';
-// Archivos de nuestro proyecto
+import 'package:constriturar/app/core/models/unit_model.dart';
+import 'package:constriturar/app/widgets/drop_down_input_field.dart';
 import 'package:constriturar/app/core/services/app/material_service.dart';
 import 'package:constriturar/app/core/services/app/unit_service.dart';
 import 'package:constriturar/app/core/models/material_model.dart';
@@ -77,6 +74,95 @@ class _MaterialsFormState extends State<MaterialsForm> {
   }
 
   void _handleUpdAdd() async {
+    // Validar que los campos no estén vacíos
+    if (_nameController.text.trim().isEmpty) {
+      // Alert dialog
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Alerta'),
+            content: Text('El nombre es obligatorio'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('Aceptar'),
+              ),
+            ],
+          );
+        },
+      );
+      return;
+    }
+
+    if (_normaController.text.trim().isEmpty) {
+      // Alert dialog
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Alerta'),
+            content: Text('La norma técnica es obligatoria'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('Aceptar'),
+              ),
+            ],
+          );
+        },
+      );
+      return;
+    }
+
+    if (_valorController.text.trim().isEmpty) {
+      // Alert dialog
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Alerta'),
+            content: Text('El valor base es obligatorio'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('Aceptar'),
+              ),
+            ],
+          );
+        },
+      );
+      return;
+    }
+
+    if (_unidadIdController.text.trim().isEmpty) {
+      // Alert dialog
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Alerta'),
+            content: Text('La unidad es obligatoria'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('Aceptar'),
+              ),
+            ],
+          );
+        },
+      );
+      return;
+    }
+
     setState(() {
       _isLoading = true;
     });
@@ -158,73 +244,26 @@ class _MaterialsFormState extends State<MaterialsForm> {
                   icon: Icons.text_fields,
                   controller: _valorController,
                 ),
-                //Extraer el widget desde acá
-                Flexible(
-                  // Cuando el widget se extraiga, este debe ser opcional, està quemado acà porque gracias al Flexible no toma el padding del padre
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Container(
-                      padding: const EdgeInsets.all(5),
-                      decoration: BoxDecoration(
-                        color: AppColors.lightPrimary,
-                        borderRadius: BorderRadius.circular(100),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: DropDownSearchField(
-                          displayAllSuggestionWhenTap: true,
-                          isMultiSelectDropdown: false,
-                          loadingBuilder: (context) {
-                            return const Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          },
-                          textFieldConfiguration: TextFieldConfiguration(
-                            autofocus: false,
-                            controller: _unidadSearchController,
-                            // Acà se maneja el cambio de valor en el campo de texto del dropdown
-                            //onChanged: (value) {
-                            //  debugPrint("Valor cambiante => $value");
-                            //},
-                            cursorColor: AppColors.primary,
-                            decoration: InputDecoration(
-                              icon: Icon(
-                                Icons.keyboard_arrow_down,
-                                color: AppColors.primary,
-                              ),
-                              hintText: 'Listado de unidades',
-                              hintStyle: const TextStyle(fontFamily: 'Gilroy'),
-                              border: InputBorder.none,
-                            ),
-                          ),
-                          // Acà se carga la lista de opciones
-                          suggestionsCallback: (pattern) async {
-                            if (pattern.isEmpty) {
-                              return _units;
-                            }
-                            return _units
-                                .where((element) => element.unidadDescripcion!
-                                    .toLowerCase()
-                                    .contains(pattern.toLowerCase()))
-                                .toList();
-                          },
-                          // Acà se maneja la selección, se puede setear en
-                          onSuggestionSelected: (suggestion) {
-                            _unidadIdController.text =
-                                suggestion.unidadId.toString();
-                            _unidadSearchController.text =
-                                suggestion.unidadDescripcion!;
-                          },
-                          itemBuilder: (context, suggestion) {
-                            return ListTile(
-                              leading: Icon(Icons.arrow_forward_ios),
-                              title: Text(suggestion.unidadDescripcion!),
-                            );
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
+                DropDownInputField<UnitModel>(
+                  isMultiple: false,
+                  searchController: _unidadSearchController,
+                  data: _units,
+                  onSuggestionSelected: (suggestion) {
+                    _unidadIdController.text = suggestion.unidadId.toString();
+                    _unidadSearchController.text =
+                        suggestion.unidadDescripcion!;
+                  },
+                  itemBuilder: (context, suggestion) {
+                    return ListTile(
+                      // leading: Icon(Icons.arrow_forward_ios),
+                      title: Text(suggestion.unidadDescripcion!),
+                    );
+                  },
+                  itemFilter: (unit, pattern) {
+                    return unit.unidadDescripcion!
+                        .toLowerCase()
+                        .contains(pattern.toLowerCase());
+                  },
                 ),
                 _isLoading
                     ? const CircularProgressIndicator()

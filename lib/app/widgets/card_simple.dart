@@ -7,6 +7,7 @@ class CardSimple extends StatefulWidget {
     required this.id,
     required this.title,
     this.description,
+    this.backgroundColor,
     required this.icon,
     required this.onEdit,
     required this.onDelete,
@@ -15,6 +16,7 @@ class CardSimple extends StatefulWidget {
   final dynamic id;
   final String title;
   final String? description;
+  final Color? backgroundColor;
   final IconData icon;
   final Function onEdit;
   final Function onDelete;
@@ -31,7 +33,7 @@ class _CardSimpleState extends State<CardSimple> {
       padding: EdgeInsets.all(10),
       margin: EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: widget.backgroundColor ?? AppColors.white,
         borderRadius: BorderRadius.all(Radius.circular(6)),
         boxShadow: [
           BoxShadow(

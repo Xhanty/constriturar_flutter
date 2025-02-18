@@ -211,18 +211,21 @@ class InfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      leading: CircleAvatar(
-        backgroundColor: AppColors.lightPrimary,
-        child: Icon(Icons.person, color: AppColors.primary),
-      ),
-      title: Text(
-        name.length > 14 ? '${name.substring(0, 14)}...' : name,
-        style: TextStyle(color: AppColors.lightPrimary),
-      ),
-      subtitle: Text(
-        role.length > 20 ? '${role.substring(0, 20)}...' : role,
-        style: TextStyle(color: AppColors.lightPrimary),
+    return Padding(
+      padding: const EdgeInsets.only(top: 10),
+      child: ListTile(
+        leading: CircleAvatar(
+          backgroundColor: AppColors.lightPrimary,
+          child: Icon(Icons.person, color: AppColors.primary),
+        ),
+        title: Text(
+          name.length > 14 ? '${name.substring(0, 14)}...' : name,
+          style: TextStyle(color: AppColors.lightPrimary),
+        ),
+        subtitle: Text(
+          role.length > 20 ? '${role.substring(0, 20)}...' : role,
+          style: TextStyle(color: AppColors.lightPrimary),
+        ),
       ),
     );
   }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:constriturar/app/views/modules/home/home_page.dart';
-import 'package:constriturar/app/core/services/secure_storage_service.dart';
 import 'package:constriturar/app/core/components/components.dart';
 import 'package:constriturar/app/core/config/app_colors.dart';
 import 'package:constriturar/app/widgets/widgets.dart';
@@ -18,27 +17,12 @@ class LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final AuthService _authService = AuthService();
-  final SecureStorageService _secureStorageService = SecureStorageService();
+  
   bool _isLoading = false;
 
-  @override
-  void initState() {
-    super.initState();
-    _checkTokens();
-  }
-
-  void _checkTokens() async {
-    final accessToken = await _secureStorageService.getAccessToken();
-    final refreshToken = await _secureStorageService.getRefreshToken();
-
-    if (accessToken != null && refreshToken != null) {
-      if (!mounted) return;
-      AppRoutes.setView(const HomePage(), context);
-    }
-  }
-
   void _handleLogin() async {
-    if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
+    if (_emailController.text.trim().isEmpty ||
+        _passwordController.text.trim().isEmpty) {
       _showSnackBar('Completa todos los campos');
       return;
     }

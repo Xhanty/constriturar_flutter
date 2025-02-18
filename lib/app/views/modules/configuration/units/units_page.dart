@@ -99,33 +99,21 @@ class _UnitsPageState extends State<UnitsPage> {
                         title: unit.unidadDescripcion!,
                         icon: Icons.straighten,
                         onEdit: (id) async {
-                          // final result = await showMaterialModalBottomSheet(
-                          //   context: context,
-                          //   shape: ShapeBorder.lerp(
-                          //     RoundedRectangleBorder(
-                          //       borderRadius: BorderRadius.only(
-                          //         topLeft: Radius.circular(20),
-                          //         topRight: Radius.circular(20),
-                          //       ),
-                          //     ),
-                          //     RoundedRectangleBorder(
-                          //       borderRadius: BorderRadius.only(
-                          //         topLeft: Radius.circular(20),
-                          //         topRight: Radius.circular(20),
-                          //       ),
-                          //     ),
-                          //     0,
-                          //   ),
-                          //   builder: (context) {
-                          //     return FractionallySizedBox(
-                          //       heightFactor: 0.5,
-                          //       child: UnitsForm(id: id),
-                          //     );
-                          //   },
-                          // );
-                          // if (result == true) {
-                          //   _refreshUnits();
-                          // }
+                          final result = await showMaterialModalBottomSheet(
+                            context: context,
+                            builder: (context) {
+                              return FractionallySizedBox(
+                                heightFactor: 0.6,
+                                child: Scaffold(
+                                  resizeToAvoidBottomInset: true,
+                                  body: UnitsForm(id: id),
+                                ),
+                              );
+                            },
+                          );
+                          if (result == true) {
+                            _refreshUnits();
+                          }
                         },
                         onDelete: (id) {
                           // showDialog(
@@ -159,25 +147,13 @@ class _UnitsPageState extends State<UnitsPage> {
         onPressed: () async {
           final result = await showMaterialModalBottomSheet(
             context: context,
-            shape: ShapeBorder.lerp(
-              RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  topRight: Radius.circular(20),
-                ),
-              ),
-              RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  topRight: Radius.circular(20),
-                ),
-              ),
-              0,
-            ),
             builder: (context) {
               return FractionallySizedBox(
-                heightFactor: 0.5,
-                child: UnitsForm(),
+                heightFactor: 0.6,
+                child: Scaffold(
+                  resizeToAvoidBottomInset: true,
+                  body: UnitsForm(),
+                ),
               );
             },
           );

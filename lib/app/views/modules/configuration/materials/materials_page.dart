@@ -103,25 +103,13 @@ class _MaterialsPageState extends State<MaterialsPage> {
                         onEdit: (id) async {
                           final result = await showMaterialModalBottomSheet(
                             context: context,
-                            shape: ShapeBorder.lerp(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(20),
-                                  topRight: Radius.circular(20),
-                                ),
-                              ),
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(20),
-                                  topRight: Radius.circular(20),
-                                ),
-                              ),
-                              0,
-                            ),
                             builder: (context) {
                               return FractionallySizedBox(
                                 heightFactor: 0.7,
-                                child: MaterialsForm(id: id),
+                                child: Scaffold(
+                                  resizeToAvoidBottomInset: true,
+                                  body: MaterialsForm(id: id),
+                                ),
                               );
                             },
                           );
@@ -167,25 +155,13 @@ class _MaterialsPageState extends State<MaterialsPage> {
         onPressed: () async {
           final result = await showMaterialModalBottomSheet(
             context: context,
-            shape: ShapeBorder.lerp(
-              RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  topRight: Radius.circular(20),
-                ),
-              ),
-              RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  topRight: Radius.circular(20),
-                ),
-              ),
-              0,
-            ),
             builder: (context) {
               return FractionallySizedBox(
                 heightFactor: 0.7,
-                child: MaterialsForm(),
+                child: Scaffold(
+                  resizeToAvoidBottomInset: true,
+                  body: MaterialsForm(),
+                ),
               );
             },
           );

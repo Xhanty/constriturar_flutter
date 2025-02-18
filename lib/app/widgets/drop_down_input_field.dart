@@ -26,7 +26,7 @@ class DropDownInputField<T> extends StatelessWidget {
   Widget build(BuildContext context) {
     return Flexible(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 11),
         child: Container(
           padding: const EdgeInsets.all(5),
           decoration: BoxDecoration(

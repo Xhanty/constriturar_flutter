@@ -31,7 +31,7 @@ class RoundedPasswordFieldState extends State<RoundedPasswordField> {
             Icons.lock,
             color: AppColors.primary,
           ),
-          hintText: "Contraseña",
+          hintText: "Contraseña (*)",
           hintStyle: const TextStyle(fontFamily: 'Gilroy'),
           suffixIcon: IconButton(
             icon: Icon(

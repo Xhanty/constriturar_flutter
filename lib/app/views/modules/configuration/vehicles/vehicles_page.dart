@@ -120,8 +120,11 @@ class _VehiclesPageState extends State<VehiclesPage> {
                             ),
                             builder: (context) {
                               return FractionallySizedBox(
-                                heightFactor: 0.7,
-                                child: VehiclesForm(id: id),
+                                heightFactor: 0.9,
+                                child: Scaffold(
+                                  resizeToAvoidBottomInset: true,
+                                  body: VehiclesForm(id: id),
+                                ),
                               );
                             },
                           );
@@ -134,9 +137,9 @@ class _VehiclesPageState extends State<VehiclesPage> {
                             context: context,
                             builder: (context) {
                               return AlertDialog(
-                                title: const Text("Deshabilitar material"),
+                                title: const Text("Deshabilitar vehículo"),
                                 content: const Text(
-                                    "¿Está seguro que desea deshabilitar este material?"),
+                                    "¿Está seguro que desea deshabilitar este  vehículo?"),
                                 actions: [
                                   TextButton(
                                     onPressed: () => Navigator.pop(context),
@@ -167,25 +170,13 @@ class _VehiclesPageState extends State<VehiclesPage> {
         onPressed: () async {
           final result = await showMaterialModalBottomSheet(
             context: context,
-            shape: ShapeBorder.lerp(
-              RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  topRight: Radius.circular(20),
-                ),
-              ),
-              RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  topRight: Radius.circular(20),
-                ),
-              ),
-              0,
-            ),
             builder: (context) {
               return FractionallySizedBox(
-                heightFactor: 0.7,
-                child: VehiclesForm(),
+                heightFactor: 0.9,
+                child: Scaffold(
+                  resizeToAvoidBottomInset: true,
+                  body: VehiclesForm(),
+                ),
               );
             },
           );

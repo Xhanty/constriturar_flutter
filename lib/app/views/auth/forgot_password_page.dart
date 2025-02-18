@@ -18,20 +18,24 @@ class ForgotPasswordPageState extends State<ForgotPasswordPage> {
     Size size = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
-        body: SizedBox(
-          width: size.width,
-          height: size.height,
-          child: SingleChildScrollView(
+        body: SingleChildScrollView(
+          child: SizedBox(
+            width: size.width,
+            height: size.height,
             child: Stack(
               children: [
-                const Upside(
-                  imgUrl: "assets/images/register.png",
+                const Upside(imgUrl: "assets/images/register.png"),
+                Positioned(
+                  top: size.height * 0.33,
+                  child: const PageTitleBar(
+                    title: 'Ingresa a tu cuenta',
+                  ),
                 ),
-                const PageTitleBar(title: 'Restablecer contraseña'),
-                Padding(
-                  padding: const EdgeInsets.only(top: 320.0),
+                Positioned(
+                  bottom: 0,
                   child: Container(
-                    width: double.infinity,
+                    height: size.height * 0.6,
+                    width: size.width,
                     decoration: const BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.only(
@@ -42,20 +46,17 @@ class ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        const SizedBox(
-                          height: 15,
-                        ),
+                        const SizedBox(height: 15),
                         iconButton(context),
-                        const SizedBox(
-                          height: 20,
-                        ),
+                        const SizedBox(height: 20),
                         const Text(
                           "O ingresa con tu correo",
                           style: TextStyle(
-                              color: Colors.grey,
-                              fontFamily: 'Gilroy',
-                              fontSize: 13,
-                              fontWeight: FontWeight.w600),
+                            color: Colors.grey,
+                            fontFamily: 'Gilroy',
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                         Form(
                           child: Column(
@@ -73,7 +74,7 @@ class ForgotPasswordPageState extends State<ForgotPasswordPage> {
                                 title: "¿Deseas iniciar sesión?",
                                 navigatorText: "Inicia sesión",
                                 onTap: () {
-                                  Navigator.pushNamed(context, AppRoutes.login);
+                                  Navigator.pushReplacementNamed(context, AppRoutes.login);
                                 },
                               ),
                               const SizedBox(

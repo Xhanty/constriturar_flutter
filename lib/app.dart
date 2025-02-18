@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:constriturar/app/core/config/app_colors.dart';
 import 'package:constriturar/app/routes/routes.dart';
 
 class MyApp extends StatelessWidget {
@@ -13,6 +14,11 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: true,
         fontFamily: 'Gilroy',
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: AppColors.primary,
+          primary: AppColors.primary,
+          secondary: AppColors.primary,
+        ),
       ),
     );
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:constriturar/app/core/helpers/validator.dart';
 import 'package:constriturar/app/core/models/user_model.dart';
 import 'package:constriturar/app/widgets/drop_down_input_field.dart';
 import 'package:constriturar/app/core/models/rol_model.dart';
@@ -73,9 +74,46 @@ class _UsersFormState extends State<UsersForm> {
   }
 
   void _handleUpdAdd() async {
+    // Validar los campos
+    if (!validateMultipleFields(context, [
+      _usernameController,
+      _emailController,
+      _phoneController,
+      _passwordController
+    ])) {
+      return;
+    }
+
     setState(() {
       _isLoading = true;
     });
+  }
+
+  bool validateMultipleFields(
+      BuildContext context, List<TextEditingController> controllers) {
+    final validator = ValidatorHelper(controllers);
+
+    if (validator.isRequired()) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Alerta'),
+            content: Text('Por favor, complete todos los campos obligatorios'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('Aceptar'),
+              ),
+            ],
+          );
+        },
+      );
+      return false;
+    }
+    return true;
   }
 
   @override
@@ -85,10 +123,10 @@ class _UsersFormState extends State<UsersForm> {
         Container(
           decoration: BoxDecoration(
             color: AppColors.lightPrimary,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(20),
-              topRight: Radius.circular(20),
-            ),
+            // borderRadius: BorderRadius.only(
+            //   topLeft: Radius.circular(20),
+            //   topRight: Radius.circular(20),
+            // ),
           ),
           width: double.infinity,
           height: 50,
@@ -102,59 +140,62 @@ class _UsersFormState extends State<UsersForm> {
             ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.all(20),
+        Expanded(
           child: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                RoundedInputField(
-                  hintText: "Username",
-                  icon: Icons.text_fields,
-                  controller: _usernameController,
-                ),
-                widget.id == null
-                    ? RoundedPasswordField(
-                        controller: _passwordController,
-                      )
-                    : const SizedBox(),
-                RoundedInputField(
-                  hintText: "Email",
-                  icon: Icons.text_fields,
-                  controller: _emailController,
-                ),
-                RoundedInputField(
-                  hintText: "Teléfono",
-                  icon: Icons.text_fields,
-                  controller: _phoneController,
-                ),
-                DropDownInputField<RolModel>(
-                  searchController: _userSearchController,
-                  data: _roles,
-                  onSuggestionSelected: (suggestion) {
-                    _rolesIdController.text = suggestion.role;
-                    _userSearchController.text = suggestion.role;
-                  },
-                  itemBuilder: (context, suggestion) {
-                    return ListTile(
-                      // leading: Icon(Icons.arrow_forward_ios),
-                      title: Text(suggestion.role),
-                    );
-                  },
-                  itemFilter: (rol, pattern) {
-                    return rol.role
-                        .toLowerCase()
-                        .contains(pattern.toLowerCase());
-                  },
-                  isMultiple: false,
-                ),
-                _isLoading
-                    ? const CircularProgressIndicator()
-                    : RoundedButton(
-                        text: widget.id != null ? 'Modificar' : 'Agregar',
-                        press: _handleUpdAdd,
-                      ),
-              ],
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  RoundedInputField(
+                    hintText: "Username (*)",
+                    icon: Icons.text_fields,
+                    controller: _usernameController,
+                  ),
+                  widget.id == null
+                      ? RoundedPasswordField(
+                          controller: _passwordController,
+                        )
+                      : const SizedBox(),
+                  RoundedInputField(
+                    hintText: "Email (*)",
+                    icon: Icons.text_fields,
+                    controller: _emailController,
+                  ),
+                  RoundedInputField(
+                    hintText: "Teléfono (*)",
+                    icon: Icons.text_fields,
+                    controller: _phoneController,
+                  ),
+                  DropDownInputField<RolModel>(
+                    hintText: 'Roles (*)',
+                    searchController: _userSearchController,
+                    data: _roles,
+                    onSuggestionSelected: (suggestion) {
+                      _rolesIdController.text = suggestion.role;
+                      _userSearchController.text = suggestion.role;
+                    },
+                    itemBuilder: (context, suggestion) {
+                      return ListTile(
+                        // leading: Icon(Icons.arrow_forward_ios),
+                        title: Text(suggestion.role),
+                      );
+                    },
+                    itemFilter: (rol, pattern) {
+                      return rol.role
+                          .toLowerCase()
+                          .contains(pattern.toLowerCase());
+                    },
+                    isMultiple: false,
+                  ),
+                  _isLoading
+                      ? const CircularProgressIndicator()
+                      : RoundedButton(
+                          text: widget.id != null ? 'Modificar' : 'Agregar',
+                          press: _handleUpdAdd,
+                        ),
+                ],
+              ),
             ),
           ),
         ),

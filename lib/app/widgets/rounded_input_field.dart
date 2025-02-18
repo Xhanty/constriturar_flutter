@@ -7,10 +7,19 @@ class RoundedInputField extends StatelessWidget {
       {super.key,
       this.hintText,
       this.icon = Icons.person,
+      this.type = TextInputType.text,
+      this.onTap = _defaultOnTap,
+      this.readOnly = false,
       required this.controller});
+
   final String? hintText;
   final IconData icon;
+  final TextInputType type;
+  final VoidCallback onTap;
+  final bool readOnly;
   final TextEditingController controller;
+
+  static void _defaultOnTap() {}
 
   @override
   Widget build(BuildContext context) {
@@ -18,6 +27,9 @@ class RoundedInputField extends StatelessWidget {
       child: TextFormField(
         controller: controller,
         cursorColor: AppColors.primary,
+        keyboardType: type,
+        onTap: onTap,
+        readOnly: readOnly,
         decoration: InputDecoration(
           icon: Icon(
             icon,

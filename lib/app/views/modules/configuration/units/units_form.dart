@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:constriturar/app/core/helpers/validator.dart';
 import 'package:constriturar/app/widgets/rounded_button.dart';
 import 'package:constriturar/app/widgets/rounded_input_field.dart';
 import 'package:constriturar/app/core/config/app_colors.dart';
@@ -41,27 +42,8 @@ class _UnitsFormState extends State<UnitsForm> {
   }
 
   void _handleUpdAdd() async {
-
-    // Validar que los campos no estén vacíos
-    if (_nameController.text.trim().isEmpty) {
-      // Alert dialog
-      showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text('Alerta'),
-            content: Text('El nombre es obligatorio'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text('Aceptar'),
-              ),
-            ],
-          );
-        },
-      );
+    // Validar los campos
+    if (!validateMultipleFields(context, [_nameController])) {
       return;
     }
 
@@ -89,10 +71,52 @@ class _UnitsFormState extends State<UnitsForm> {
     if (success) {
       Navigator.pop(context, true);
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error al ${widget.id != null ? 'modificar' : 'agregar'} la unidad')),
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Error'),
+            content: Text(
+                'Ocurrió un error al ${widget.id != null ? 'modificar' : 'agregar'} la unidad'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('Aceptar'),
+              ),
+            ],
+          );
+        },
       );
     }
+  }
+
+  bool validateMultipleFields(
+      BuildContext context, List<TextEditingController> controllers) {
+    final validator = ValidatorHelper(controllers);
+
+    if (validator.isRequired()) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Alerta'),
+            content: Text('Por favor, complete todos los campos obligatorios'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('Aceptar'),
+              ),
+            ],
+          );
+        },
+      );
+      return false;
+    }
+    return true;
   }
 
   @override
@@ -102,10 +126,10 @@ class _UnitsFormState extends State<UnitsForm> {
         Container(
           decoration: BoxDecoration(
             color: AppColors.lightPrimary,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(20),
-              topRight: Radius.circular(20),
-            ),
+            // borderRadius: BorderRadius.only(
+            //   topLeft: Radius.circular(20),
+            //   topRight: Radius.circular(20),
+            // ),
           ),
           width: double.infinity,
           height: 50,
@@ -119,23 +143,25 @@ class _UnitsFormState extends State<UnitsForm> {
             ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.all(20),
+        Expanded(
           child: SingleChildScrollView(
-            child: Column(
-              children: [
-                RoundedInputField(
-                  hintText: "Nombre",
-                  icon: Icons.text_fields,
-                  controller: _nameController,
-                ),
-                _isLoading
-                    ? const CircularProgressIndicator()
-                    : RoundedButton(
-                        text: widget.id != null ? 'Modificar' : 'Agregar',
-                        press: _handleUpdAdd,
-                      ),
-              ],
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                children: [
+                  RoundedInputField(
+                    hintText: "Nombre (*)",
+                    icon: Icons.text_fields,
+                    controller: _nameController,
+                  ),
+                  _isLoading
+                      ? const CircularProgressIndicator()
+                      : RoundedButton(
+                          text: widget.id != null ? 'Modificar' : 'Agregar',
+                          press: _handleUpdAdd,
+                        ),
+                ],
+              ),
             ),
           ),
         ),

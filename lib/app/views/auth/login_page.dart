@@ -76,18 +76,24 @@ class LoginPageState extends State<LoginPage> {
     Size size = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
-        body: SizedBox(
-          width: size.width,
-          height: size.height,
-          child: SingleChildScrollView(
+        body: SingleChildScrollView(
+          child: SizedBox(
+            width: size.width,
+            height: size.height,
             child: Stack(
               children: [
                 const Upside(imgUrl: "assets/images/login.png"),
-                const PageTitleBar(title: 'Ingresa a tu cuenta'),
-                Padding(
-                  padding: const EdgeInsets.only(top: 320.0),
+                Positioned(
+                  top: size.height * 0.33,
+                  child: const PageTitleBar(
+                    title: 'Ingresa a tu cuenta',
+                  ),
+                ),
+                Positioned(
+                  bottom: 0,
                   child: Container(
-                    width: double.infinity,
+                    height: size.height * 0.6,
+                    width: size.width,
                     decoration: const BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.only(
@@ -104,16 +110,17 @@ class LoginPageState extends State<LoginPage> {
                         const Text(
                           "O ingresa con tu correo",
                           style: TextStyle(
-                              color: Colors.grey,
-                              fontFamily: 'Gilroy',
-                              fontSize: 13,
-                              fontWeight: FontWeight.w600),
+                            color: Colors.grey,
+                            fontFamily: 'Gilroy',
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                         Form(
                           child: Column(
                             children: [
                               RoundedInputField(
-                                hintText: "Correo electrónico",
+                                hintText: "Correo electrónico (*)",
                                 icon: Icons.email,
                                 controller: _emailController,
                               ),
@@ -130,7 +137,7 @@ class LoginPageState extends State<LoginPage> {
                               const SizedBox(height: 10),
                               GestureDetector(
                                 onTap: () {
-                                  Navigator.pushNamed(
+                                  Navigator.pushReplacementNamed(
                                       context, AppRoutes.forgotPassword);
                                 },
                                 child: const Text(
@@ -149,7 +156,7 @@ class LoginPageState extends State<LoginPage> {
                       ],
                     ),
                   ),
-                )
+                ),
               ],
             ),
           ),

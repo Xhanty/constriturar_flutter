@@ -102,25 +102,13 @@ class _UsersPageState extends State<UsersPage> {
                         onEdit: (id) async {
                           // final result = await showMaterialModalBottomSheet(
                           //   context: context,
-                          //   shape: ShapeBorder.lerp(
-                          //     RoundedRectangleBorder(
-                          //       borderRadius: BorderRadius.only(
-                          //         topLeft: Radius.circular(20),
-                          //         topRight: Radius.circular(20),
-                          //       ),
-                          //     ),
-                          //     RoundedRectangleBorder(
-                          //       borderRadius: BorderRadius.only(
-                          //         topLeft: Radius.circular(20),
-                          //         topRight: Radius.circular(20),
-                          //       ),
-                          //     ),
-                          //     0,
-                          //   ),
                           //   builder: (context) {
                           //     return FractionallySizedBox(
                           //       heightFactor: 0.7,
-                          //       child: UsersForm(id: id),
+                          //       child: Scaffold(
+                          //         resizeToAvoidBottomInset: true,
+                          //         body: UsersForm(id: id),
+                          //       ),
                           //     );
                           //   },
                           // );
@@ -166,25 +154,13 @@ class _UsersPageState extends State<UsersPage> {
         onPressed: () async {
           final result = await showMaterialModalBottomSheet(
             context: context,
-            shape: ShapeBorder.lerp(
-              RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  topRight: Radius.circular(20),
-                ),
-              ),
-              RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  topRight: Radius.circular(20),
-                ),
-              ),
-              0,
-            ),
             builder: (context) {
               return FractionallySizedBox(
                 heightFactor: 0.7,
-                child: UsersForm(),
+                child: Scaffold(
+                  resizeToAvoidBottomInset: true,
+                  body: UsersForm(),
+                ),
               );
             },
           );

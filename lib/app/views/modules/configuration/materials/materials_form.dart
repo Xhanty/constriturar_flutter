@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:constriturar/app/core/helpers/validator.dart';
 import 'package:constriturar/app/core/models/unit_model.dart';
 import 'package:constriturar/app/widgets/drop_down_input_field.dart';
 import 'package:constriturar/app/core/services/app/material_service.dart';
@@ -74,92 +75,13 @@ class _MaterialsFormState extends State<MaterialsForm> {
   }
 
   void _handleUpdAdd() async {
-    // Validar que los campos no estén vacíos
-    if (_nameController.text.trim().isEmpty) {
-      // Alert dialog
-      showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text('Alerta'),
-            content: Text('El nombre es obligatorio'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text('Aceptar'),
-              ),
-            ],
-          );
-        },
-      );
-      return;
-    }
-
-    if (_normaController.text.trim().isEmpty) {
-      // Alert dialog
-      showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text('Alerta'),
-            content: Text('La norma técnica es obligatoria'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text('Aceptar'),
-              ),
-            ],
-          );
-        },
-      );
-      return;
-    }
-
-    if (_valorController.text.trim().isEmpty) {
-      // Alert dialog
-      showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text('Alerta'),
-            content: Text('El valor base es obligatorio'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text('Aceptar'),
-              ),
-            ],
-          );
-        },
-      );
-      return;
-    }
-
-    if (_unidadIdController.text.trim().isEmpty) {
-      // Alert dialog
-      showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text('Alerta'),
-            content: Text('La unidad es obligatoria'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text('Aceptar'),
-              ),
-            ],
-          );
-        },
-      );
+    // Validar los campos
+    if (!validateMultipleFields(context, [
+      _nameController,
+      _normaController,
+      _valorController,
+      _unidadIdController
+    ])) {
       return;
     }
 
@@ -191,12 +113,52 @@ class _MaterialsFormState extends State<MaterialsForm> {
     if (success) {
       Navigator.pop(context, true);
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Error'),
             content: Text(
-                'Error al ${widget.id != null ? 'modificar' : 'agregar'} el material')),
+                'Ocurrió un error al ${widget.id != null ? 'modificar' : 'agregar'} el material'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('Aceptar'),
+              ),
+            ],
+          );
+        },
       );
     }
+  }
+
+  bool validateMultipleFields(
+      BuildContext context, List<TextEditingController> controllers) {
+    final validator = ValidatorHelper(controllers);
+
+    if (validator.isRequired()) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Alerta'),
+            content: Text('Por favor, complete todos los campos obligatorios'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('Aceptar'),
+              ),
+            ],
+          );
+        },
+      );
+      return false;
+    }
+    return true;
   }
 
   @override
@@ -206,10 +168,10 @@ class _MaterialsFormState extends State<MaterialsForm> {
         Container(
           decoration: BoxDecoration(
             color: AppColors.lightPrimary,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(20),
-              topRight: Radius.circular(20),
-            ),
+            // borderRadius: BorderRadius.only(
+            //   topLeft: Radius.circular(20),
+            //   topRight: Radius.circular(20),
+            // ),
           ),
           width: double.infinity,
           height: 50,
@@ -223,55 +185,59 @@ class _MaterialsFormState extends State<MaterialsForm> {
             ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.all(20),
+        Expanded(
           child: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                RoundedInputField(
-                  hintText: "Nombre",
-                  icon: Icons.text_fields,
-                  controller: _nameController,
-                ),
-                RoundedInputField(
-                  hintText: "Norma técnica",
-                  icon: Icons.text_fields,
-                  controller: _normaController,
-                ),
-                RoundedInputField(
-                  hintText: "Valor base",
-                  icon: Icons.text_fields,
-                  controller: _valorController,
-                ),
-                DropDownInputField<UnitModel>(
-                  isMultiple: false,
-                  searchController: _unidadSearchController,
-                  data: _units,
-                  onSuggestionSelected: (suggestion) {
-                    _unidadIdController.text = suggestion.unidadId.toString();
-                    _unidadSearchController.text =
-                        suggestion.unidadDescripcion!;
-                  },
-                  itemBuilder: (context, suggestion) {
-                    return ListTile(
-                      // leading: Icon(Icons.arrow_forward_ios),
-                      title: Text(suggestion.unidadDescripcion!),
-                    );
-                  },
-                  itemFilter: (unit, pattern) {
-                    return unit.unidadDescripcion!
-                        .toLowerCase()
-                        .contains(pattern.toLowerCase());
-                  },
-                ),
-                _isLoading
-                    ? const CircularProgressIndicator()
-                    : RoundedButton(
-                        text: widget.id != null ? 'Modificar' : 'Agregar',
-                        press: _handleUpdAdd,
-                      ),
-              ],
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  RoundedInputField(
+                    hintText: "Nombre (*)",
+                    icon: Icons.text_fields,
+                    controller: _nameController,
+                  ),
+                  RoundedInputField(
+                    hintText: "Norma técnica (*)",
+                    icon: Icons.text_fields,
+                    controller: _normaController,
+                  ),
+                  RoundedInputField(
+                    hintText: "Valor base (*)",
+                    icon: Icons.text_fields,
+                    controller: _valorController,
+                    type: TextInputType.number,
+                  ),
+                  DropDownInputField<UnitModel>(
+                    hintText: 'Unidad (*)',
+                    isMultiple: false,
+                    searchController: _unidadSearchController,
+                    data: _units,
+                    onSuggestionSelected: (suggestion) {
+                      _unidadIdController.text = suggestion.unidadId.toString();
+                      _unidadSearchController.text =
+                          suggestion.unidadDescripcion!;
+                    },
+                    itemBuilder: (context, suggestion) {
+                      return ListTile(
+                        // leading: Icon(Icons.arrow_forward_ios),
+                        title: Text(suggestion.unidadDescripcion!),
+                      );
+                    },
+                    itemFilter: (unit, pattern) {
+                      return unit.unidadDescripcion!
+                          .toLowerCase()
+                          .contains(pattern.toLowerCase());
+                    },
+                  ),
+                  _isLoading
+                      ? const CircularProgressIndicator()
+                      : RoundedButton(
+                          text: widget.id != null ? 'Modificar' : 'Agregar',
+                          press: _handleUpdAdd,
+                        ),
+                ],
+              ),
             ),
           ),
         ),

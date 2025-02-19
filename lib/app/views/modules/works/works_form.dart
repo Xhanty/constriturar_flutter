@@ -1,41 +1,40 @@
 import 'package:flutter/material.dart';
+import 'package:constriturar/app/core/helpers/validator.dart';
+import 'package:constriturar/app/core/models/work_model.dart';
+import 'package:constriturar/app/core/services/app/work_service.dart';
 import 'package:constriturar/app/core/config/app_colors.dart';
 import 'package:constriturar/app/widgets/rounded_button.dart';
 import 'package:constriturar/app/widgets/rounded_input_field.dart';
-import 'package:constriturar/app/core/helpers/validator.dart';
-import 'package:constriturar/app/core/models/client_model.dart';
-import 'package:constriturar/app/core/services/app/client_service.dart';
 
-class ClientsForm extends StatefulWidget {
-  const ClientsForm({super.key, this.id});
+class WorksForm extends StatefulWidget {
+  const WorksForm({super.key, this.id});
 
   final int? id;
 
   @override
-  State<ClientsForm> createState() => _ClientsFormState();
+  State<WorksForm> createState() => _WorksFormState();
 }
 
-class _ClientsFormState extends State<ClientsForm> {
+class _WorksFormState extends State<WorksForm> {
   final _nameController = TextEditingController();
-  final ClientService _clientService = ClientService();
+  final WorkService _workService = WorkService();
   bool _isLoading = false;
 
   @override
   void initState() {
     super.initState();
     if (widget.id != null) {
-      _loadClient();
+      _loadWork();
     }
   }
 
-  void _loadClient() async {
+  void _loadWork() async {
     setState(() {
       _isLoading = true;
     });
-    final client =
-        await _clientService.getById(ClientModel(clienteId: widget.id!));
-    if (client != null) {
-      _nameController.text = client.nombres!;
+    final work = await _workService.getById(WorkModel(obraId: widget.id!));
+    if (work != null) {
+      _nameController.text = work.obraNombre!;
     }
     setState(() {
       _isLoading = false;
@@ -96,7 +95,7 @@ class _ClientsFormState extends State<ClientsForm> {
           height: 50,
           child: Center(
             child: Text(
-              widget.id != null ? 'Modificar cliente' : 'Nuevo cliente',
+              widget.id != null ? 'Modificar obra' : 'Nueva obra',
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,

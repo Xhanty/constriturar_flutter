@@ -1,5 +1,5 @@
-import 'package:constriturar/app/views/modules/configuration/vehicles/vehicles_form.dart';
 import 'package:flutter/material.dart';
+import 'package:constriturar/app/views/modules/configuration/vehicles/vehicles_form.dart';
 import 'package:constriturar/app/core/config/app_colors.dart';
 import 'package:constriturar/app/widgets/card_simple.dart';
 import 'package:constriturar/app/core/models/vehicle_model.dart';
@@ -36,11 +36,11 @@ class _VehiclesPageState extends State<VehiclesPage> {
   }
 
   void _getVehicles() async {
-    final materials = await _vehicleService.getAll();
+    final vehicles = await _vehicleService.getAll();
     if (!mounted) return;
     setState(() {
-      _vehicles = materials;
-      _filteredVechicles = materials;
+      _vehicles = vehicles;
+      _filteredVechicles = vehicles;
       _isLoading = false;
     });
   }
@@ -185,7 +185,7 @@ class _VehiclesPageState extends State<VehiclesPage> {
           }
         },
         backgroundColor: AppColors.primary,
-        tooltip: 'Agregar material',
+        tooltip: 'Agregar vehículo',
         child: Icon(
           Icons.add,
           color: AppColors.lightPrimary,

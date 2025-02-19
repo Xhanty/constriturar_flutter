@@ -1,31 +1,32 @@
+import 'package:constriturar/app/core/models/business_model.dart';
 import 'package:constriturar/app/core/models/document_type_model.dart';
 import 'package:constriturar/app/core/models/user_model.dart';
 
 class ClientModel {
   final int clienteId;
-  final String nombres;
-  final String primerApellido;
-  final String segundoApellido;
-  final String nombreCompleto;
-  final String identificacion;
-  final String encargado;
-  final DocumentTypeModel tipoDocumento;
-  final UserModel user;
-  final List<String> empresa;
-  final String saldoCliente;
+  final String? nombres;
+  final String? primerApellido;
+  final String? segundoApellido;
+  final String? nombreCompleto;
+  final String? identificacion;
+  final String? encargado;
+  final DocumentTypeModel? tipoDocumento;
+  final UserModel? user;
+  final BusinessModel? empresa;
+  final String? saldoCliente;
 
   ClientModel({
     required this.clienteId,
-    required this.nombres,
-    required this.primerApellido,
-    required this.segundoApellido,
-    required this.nombreCompleto,
-    required this.identificacion,
-    required this.encargado,
-    required this.tipoDocumento,
-    required this.user,
-    required this.empresa,
-    required this.saldoCliente,
+    this.nombres,
+    this.primerApellido,
+    this.segundoApellido,
+    this.nombreCompleto,
+    this.identificacion,
+    this.encargado,
+    this.tipoDocumento,
+    this.user,
+    this.empresa,
+    this.saldoCliente,
   });
 
   factory ClientModel.fromJson(Map<String, dynamic> json) {
@@ -39,7 +40,7 @@ class ClientModel {
       encargado: json['encargado'],
       tipoDocumento: DocumentTypeModel.fromJson(json['tipoDocumento']),
       user: UserModel.fromJson(json['user']),
-      empresa: List<String>.from(json['empresa']),
+      empresa: BusinessModel.fromJson(json['empresa']),
       saldoCliente: json['saldoCliente'],
     );
   }
@@ -53,8 +54,8 @@ class ClientModel {
       'nombreCompleto': nombreCompleto,
       'identificacion': identificacion,
       'encargado': encargado,
-      'tipoDocumento': tipoDocumento.toJson(),
-      'user': user.toJson(),
+      'tipoDocumento': tipoDocumento?.toJson(),
+      'user': user?.toJson(),
       'empresa': empresa,
       'saldoCliente': saldoCliente,
     };

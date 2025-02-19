@@ -1,12 +1,12 @@
 class BusinessModel {
   final int empresaId;
-  final String nombre;
-  final String codigo;
+  final String? nombre;
+  final String? codigo;
 
   BusinessModel({
     required this.empresaId,
-    required this.nombre,
-    required this.codigo,
+    this.nombre,
+    this.codigo,
   });
 
   factory BusinessModel.fromJson(Map<String, dynamic> json) {

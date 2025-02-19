@@ -1,30 +1,31 @@
+import 'package:constriturar/app/core/models/business_model.dart';
 import 'package:constriturar/app/core/models/city_model.dart';
 import 'package:constriturar/app/core/models/client_model.dart';
 import 'package:constriturar/app/core/models/department_model.dart';
 
 class WorkModel {
   final int obraId;
-  final String obraNombre;
-  final String telefono;
-  final String nombreContacto;
-  final String ubicacion;
-  final String direccion;
-  final CityModel municipio;
-  final ClientModel cliente;
-  final List<String> empresa;
-  final DepartmentModel departamento;
+  final String? obraNombre;
+  final String? telefono;
+  final String? nombreContacto;
+  final String? ubicacion;
+  final String? direccion;
+  final CityModel? municipio;
+  final ClientModel? cliente;
+  final BusinessModel? empresa;
+  final DepartmentModel? departamento;
 
   WorkModel({
     required this.obraId,
-    required this.obraNombre,
-    required this.telefono,
-    required this.nombreContacto,
-    required this.ubicacion,
-    required this.direccion,
-    required this.municipio,
-    required this.cliente,
-    required this.empresa,
-    required this.departamento,
+    this.obraNombre,
+    this.telefono,
+    this.nombreContacto,
+    this.ubicacion,
+    this.direccion,
+    this.municipio,
+    this.cliente,
+    this.empresa,
+    this.departamento,
   });
 
   factory WorkModel.fromJson(Map<String, dynamic> json) {
@@ -37,7 +38,7 @@ class WorkModel {
       direccion: json['direccion'],
       municipio: CityModel.fromJson(json['municipio']),
       cliente: ClientModel.fromJson(json['cliente']),
-      empresa: List<String>.from(json['empresa']),
+      empresa: BusinessModel.fromJson(json['empresa']),
       departamento: DepartmentModel.fromJson(json['departamento']),
     );
   }
@@ -50,10 +51,10 @@ class WorkModel {
       'nombreContacto': nombreContacto,
       'ubicacion': ubicacion,
       'direccion': direccion,
-      'municipio': municipio.toJson(),
-      'cliente': cliente.toJson(),
+      'municipio': municipio?.toJson(),
+      'cliente': cliente?.toJson(),
       'empresa': empresa,
-      'departamento': departamento.toJson(),
+      'departamento': departamento?.toJson(),
     };
   }
 }

@@ -1,5 +1,5 @@
-import 'package:constriturar/app/views/modules/works/works_form.dart';
 import 'package:flutter/material.dart';
+import 'package:constriturar/app/views/modules/works/works_form.dart';
 import 'package:constriturar/app/core/config/app_colors.dart';
 import 'package:constriturar/app/core/models/work_model.dart';
 import 'package:constriturar/app/core/services/app/work_service.dart';
@@ -120,7 +120,7 @@ class _WorksPageState extends State<WorksPage> {
                             ),
                             builder: (context) {
                               return FractionallySizedBox(
-                                heightFactor: 0.6,
+                                heightFactor: 0.9,
                                 child: Scaffold(
                                   resizeToAvoidBottomInset: true,
                                   body: WorksForm(id: id),
@@ -172,7 +172,7 @@ class _WorksPageState extends State<WorksPage> {
             context: context,
             builder: (context) {
               return FractionallySizedBox(
-                heightFactor: 0.6,
+                heightFactor: 0.9,
                 child: Scaffold(
                   resizeToAvoidBottomInset: true,
                   body: WorksForm(),

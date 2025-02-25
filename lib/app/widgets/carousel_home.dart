@@ -65,7 +65,7 @@ class _CarouselHomeState extends State<CarouselHome> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                '¡Nueva órden de servicio!',
+                                '¡Órden de servicio!',
                                 style: const TextStyle(
                                   fontSize: 22,
                                   fontWeight: FontWeight.w700,

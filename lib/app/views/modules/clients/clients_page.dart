@@ -97,7 +97,7 @@ class _ClientsPageState extends State<ClientsPage> {
                       final client = _filteredClients[index];
                       return CardSimple(
                         id: client.clienteId,
-                        title: client.nombres!,
+                        title: client.nombreCompleto!,
                         description: client.identificacion,
                         icon: Icons.people,
                         onEdit: (id) async {
@@ -120,7 +120,7 @@ class _ClientsPageState extends State<ClientsPage> {
                             ),
                             builder: (context) {
                               return FractionallySizedBox(
-                                heightFactor: 0.6,
+                                heightFactor: 0.9,
                                 child: Scaffold(
                                   resizeToAvoidBottomInset: true,
                                   body: ClientsForm(id: id),
@@ -172,7 +172,7 @@ class _ClientsPageState extends State<ClientsPage> {
             context: context,
             builder: (context) {
               return FractionallySizedBox(
-                heightFactor: 0.6,
+                heightFactor: 0.9,
                 child: Scaffold(
                   resizeToAvoidBottomInset: true,
                   body: ClientsForm(),

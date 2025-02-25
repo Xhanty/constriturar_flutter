@@ -5,10 +5,12 @@ class RoundedButton extends StatelessWidget {
   const RoundedButton(
       {super.key,
       this.press,
-      this.textColor = Colors.white,
+      this.backgroundColor = AppColors.primary,
+      this.textColor = AppColors.white,
       required this.text});
   final String text;
   final Function()? press;
+  final Color? backgroundColor;
   final Color? textColor;
 
   @override
@@ -28,7 +30,7 @@ class RoundedButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: press,
       style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primary,
+          backgroundColor: backgroundColor,
           padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
           textStyle: TextStyle(
               letterSpacing: 2,

@@ -1,3 +1,5 @@
+import 'package:constriturar/app/core/models/user_model.dart';
+import 'package:constriturar/app/widgets/rounded_password_field.dart';
 import 'package:flutter/material.dart';
 import 'package:constriturar/app/core/models/document_type_model.dart';
 import 'package:constriturar/app/core/services/app/document_type_service.dart';
@@ -25,6 +27,13 @@ class _ClientsFormState extends State<ClientsForm> {
   final _firstLastNameController = TextEditingController();
   final _secondLastNameController = TextEditingController();
   final _responsibleController = TextEditingController();
+
+  // Datos del usuario
+  final _idUserController = TextEditingController();
+  final _usernameController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _phoneController = TextEditingController();
 
   final _documentTypeSearchController = TextEditingController();
 
@@ -59,6 +68,10 @@ class _ClientsFormState extends State<ClientsForm> {
           client.tipoDocumento!.tipoDocumentoId.toString();
       _documentController.text = client.identificacion!;
       _responsibleController.text = client.encargado!;
+      _idUserController.text = client.user!.id!;
+      _usernameController.text = client.user!.userName!;
+      _emailController.text = client.user!.email!;
+      _phoneController.text = client.user!.phoneNumber!;
     }
     setState(() {
       _isLoading = false;
@@ -92,8 +105,11 @@ class _ClientsFormState extends State<ClientsForm> {
       _documentController,
       _namesController,
       _firstLastNameController,
-      _secondLastNameController,
       _responsibleController,
+      _usernameController,
+      if (widget.id == null) _passwordController,
+      _emailController,
+      _phoneController,
     ])) {
       return;
     }
@@ -101,6 +117,66 @@ class _ClientsFormState extends State<ClientsForm> {
     setState(() {
       _isLoading = true;
     });
+
+    final client = ClientModel(
+      clienteId: widget.id ?? 0,
+      nombres: _namesController.text,
+      primerApellido: _firstLastNameController.text,
+      segundoApellido: _secondLastNameController.text,
+      tipoDocumentoId: int.parse(_documentTypeController.text),
+      identificacion: _documentController.text,
+      encargado: _responsibleController.text,
+      empresaId: 1, // Cambiar por el id de la empresa de la sesión
+      user: UserModel(
+        userName: _usernameController.text,
+        email: _emailController.text,
+        phoneNumber: _phoneController.text,
+      ),
+    );
+
+    if (widget.id != null) {
+      client.user!.id = _idUserController.text;
+    }
+
+    if (widget.id == null) {
+      client.user!.password = _passwordController.text;
+    }
+
+    bool success;
+
+    if (widget.id != null) {
+      success = await _clientService.update(client);
+    } else {
+      success = await _clientService.create(client);
+    }
+
+    setState(() {
+      _isLoading = false;
+    });
+
+    if (!mounted) return;
+    if (success) {
+      Navigator.pop(context, true);
+    } else {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Error'),
+            content: Text(
+                'Ocurrió un error al ${widget.id != null ? 'modificar' : 'agregar'} el cliente'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('Aceptar'),
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
 
   bool validateMultipleFields(
@@ -209,6 +285,27 @@ class _ClientsFormState extends State<ClientsForm> {
                     hintText: "Encargado (*)",
                     icon: Icons.text_fields,
                     controller: _responsibleController,
+                  ),
+                  Divider(),
+                  RoundedInputField(
+                    hintText: "Username (*)",
+                    icon: Icons.person,
+                    controller: _usernameController,
+                  ),
+                  widget.id == null
+                      ? RoundedPasswordField(
+                          controller: _passwordController,
+                        )
+                      : Container(),
+                  RoundedInputField(
+                    hintText: "Email (*)",
+                    icon: Icons.email,
+                    controller: _emailController,
+                  ),
+                  RoundedInputField(
+                    hintText: "Teléfono (*)",
+                    icon: Icons.phone,
+                    controller: _phoneController,
                   ),
                   _isLoading
                       ? const CircularProgressIndicator()

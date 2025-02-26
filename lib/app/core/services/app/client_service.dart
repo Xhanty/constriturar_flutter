@@ -33,7 +33,7 @@ class ClientService {
   // Método para crear un cliente
   Future<bool> create(ClientModel client) async {
     final url = 'clientes';
-    final response = await _requestService.post(url, client.toJson());
+    final response = await _requestService.post(url, client);
 
     return response != null && response["statusCode"] == 201;
   }
@@ -41,7 +41,7 @@ class ClientService {
   // Método para actualizar un cliente
   Future<bool> update(ClientModel client) async {
     final url = 'clientes/${client.clienteId}';
-    final response = await _requestService.put(url, client.toJson());
+    final response = await _requestService.put(url, client);
 
     return response != null && response["statusCode"] == 204;
   }

@@ -43,97 +43,122 @@ class RequestService {
   // Método para realizar la petición HTTP
   Future<http.Response?> _makeRequest(
       Future<http.Response> Function() request) async {
-    final response = await request();
+    try {
+      final response = await request();
 
-    if (response.statusCode == 401) {
-      final refreshToken = await _refreshToken();
-      if (refreshToken) {
-        return await request();
+      if (response.statusCode == 401) {
+        final refreshToken = await _refreshToken();
+        if (refreshToken) {
+          return await request();
+        }
       }
-    }
 
-    return response;
+      return response;
+    } catch (ex) {
+      // Log the exception if needed
+      return null;
+    }
   }
 
   // Método para realizar una petición GET
   Future<Map<String, dynamic>?> get(String url) async {
-    final response = await _makeRequest(() async => http.get(
-          Uri.parse('$_baseUrl/$url'),
-          headers: {
-            'Authorization':
-                'Bearer ${await _secureStorageService.getAccessToken()}',
-            'Content-Type': 'application/json'
-          },
-        ));
+    try {
+      final response = await _makeRequest(() async => http.get(
+            Uri.parse('$_baseUrl/$url'),
+            headers: {
+              'Authorization':
+                  'Bearer ${await _secureStorageService.getAccessToken()}',
+              'Content-Type': 'application/json'
+            },
+          ));
 
-    // debugPrint('Response status: ${response?.statusCode}');
-    // debugPrint('Response body: ${response?.body}');
+      // debugPrint('Response status: ${response?.statusCode}');
+      // debugPrint('Response body: ${response?.body}');
 
-    return response != null
-        ? {
-            'statusCode': response.statusCode,
-            'body': json.decode(response.body)
-          }
-        : null;
+      return response != null
+          ? {
+              'statusCode': response.statusCode,
+              'body': json.decode(response.body)
+            }
+          : null;
+    } catch (ex) {
+      // Log the exception if needed
+      return null;
+    }
   }
 
   // Método para realizar una petición POST
   Future<dynamic> post(String url, dynamic body) async {
-    final response = await _makeRequest(() async => http.post(
-          Uri.parse('$_baseUrl/$url'),
-          headers: {
-            'Authorization':
-                'Bearer ${await _secureStorageService.getAccessToken()}',
-            'Content-Type': 'application/json'
-          },
-          body: jsonEncode(body),
-        ));
+    try {
+      final response = await _makeRequest(() async => http.post(
+            Uri.parse('$_baseUrl/$url'),
+            headers: {
+              'Authorization':
+                  'Bearer ${await _secureStorageService.getAccessToken()}',
+              'Content-Type': 'application/json'
+            },
+            body: jsonEncode(body),
+          ));
 
-    return response != null
-        ? {
-            'statusCode': response.statusCode,
-            'body': json.decode(response.body)
-          }
-        : null;
+      return response != null
+          ? {
+              'statusCode': response.statusCode,
+              'body': json.decode(response.body)
+            }
+          : null;
+    } catch (ex) {
+      // Log the exception if needed
+      return null;
+    }
   }
 
   // Método para realizar una petición PUT
   Future<dynamic> put(String url, dynamic body) async {
-    final response = await _makeRequest(() async => http.put(
-          Uri.parse('$_baseUrl/$url'),
-          headers: {
-            'Authorization':
-                'Bearer ${await _secureStorageService.getAccessToken()}',
-            'Content-Type': 'application/json'
-          },
-          body: jsonEncode(body),
-        ));
+    try {
+      final response = await _makeRequest(() async => http.put(
+            Uri.parse('$_baseUrl/$url'),
+            headers: {
+              'Authorization':
+                  'Bearer ${await _secureStorageService.getAccessToken()}',
+              'Content-Type': 'application/json'
+            },
+            body: jsonEncode(body),
+          ));
 
-    return response != null
-        ? {
-            'statusCode': response.statusCode,
-            // 'body': json.decode(response.body)
-          }
-        : null;
+      return response != null
+          ? {
+              'statusCode': response.statusCode,
+              // 'body': json.decode(response.body)
+            }
+          : null;
+    } catch (ex) {
+      // Log the exception if needed
+      return null;
+    }
   }
 
   // Método para realizar una petición PATCH
   Future<dynamic> patch(String url, dynamic body) async {
-    final response = await _makeRequest(() async => http.patch(
-          Uri.parse('$_baseUrl/$url'),
-          headers: {
-            'Authorization':
-                'Bearer ${await _secureStorageService.getAccessToken()}',
-            'Content-Type': 'application/json'
-          },
-          body: jsonEncode(body),
-        ));
+    try {
+      final response = await _makeRequest(() async => http.patch(
+            Uri.parse('$_baseUrl/$url'),
+            headers: {
+              'Authorization':
+                  'Bearer ${await _secureStorageService.getAccessToken()}',
+              'Content-Type': 'application/json'
+            },
+            body: jsonEncode(body),
+          ));
 
-    return response != null
-        ? {
-            'statusCode': response.statusCode,
-            // 'body': json.decode(response.body)
-          }
-        : null;
+      return response != null
+          ? {
+              'statusCode': response.statusCode,
+              // 'body': json.decode(response.body)
+            }
+          : null;
+    } catch (ex) {
+      // Log the exception if needed
+      return null;
+    }
   }
 }

@@ -1,8 +1,8 @@
+import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:constriturar/app/core/services/secure_storage_service.dart';
 import 'package:constriturar/app/routes/routes.dart';
 import 'package:constriturar/app/views/modules/home/home_page.dart';
-import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
